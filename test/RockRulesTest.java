@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class RulesTest {
+public class RockRulesTest {
 
     private RockRule rockRule;
 
