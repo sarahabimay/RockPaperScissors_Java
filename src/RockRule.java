@@ -1,4 +1,4 @@
-public class RockRule {
+public class RockRule implements Rule {
 
     public SYMBOL decideWinner(SYMBOL player1Signal, SYMBOL player2Signal) {
         if (player1Signal != SYMBOL.ROCK && player2Signal != SYMBOL.ROCK) {
