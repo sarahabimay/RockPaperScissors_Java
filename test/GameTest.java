@@ -27,6 +27,7 @@ public class GameTest {
     @Test
     public void playAGame() {
         SYMBOL humanMoveFromConsole = SYMBOL.PAPER;
+        game.generateAIMove();
         assertEquals(SYMBOL.class, game.startGame(humanMoveFromConsole).getClass());
     }
 }

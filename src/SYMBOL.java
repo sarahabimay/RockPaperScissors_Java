@@ -8,13 +8,10 @@ public enum SYMBOL {
 
     static Map<Integer, SYMBOL> ordinalToSymbol = new HashMap<>();
 
-    SYMBOL() {
-    }
-
     public static void setOrdinalToSymbol() {
         ordinalToSymbol.put(1, ROCK);
-        ordinalToSymbol.put(2, SCISSORS);
-        ordinalToSymbol.put(3, PAPER);
+        ordinalToSymbol.put(2, PAPER);
+        ordinalToSymbol.put(3, SCISSORS);
     }
     public static SYMBOL getSymbolFromOrdinal(int ordinal){
         return ordinalToSymbol.get(ordinal);

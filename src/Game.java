@@ -2,8 +2,9 @@ import java.util.Random;
 
 public class Game {
 
-    private SYMBOL aiPlayer;
     private Rules rules;
+    private SYMBOL aiPlayer;
+    private SYMBOL winningSymbol;
 
     public Game() {
         aiPlayer = null;
@@ -17,12 +18,13 @@ public class Game {
         return aiPlayer;
     }
 
-    public SYMBOL play(SYMBOL symbol1, SYMBOL symbol2) {
+    SYMBOL play(SYMBOL symbol1, SYMBOL symbol2) {
         return rules.decideWinner(symbol1, symbol2);
     }
 
     public SYMBOL startGame(SYMBOL inputMove) {
-        return play(inputMove, generateAIMove());
+        winningSymbol = play(inputMove, aiPlayer);
+        return winningSymbol;
     }
 
     private SYMBOL getRandomSymbolInRange(int range) {
@@ -38,5 +40,9 @@ public class Game {
     int randomNumberInRange(long fraction) {
         int start = 1;
         return (int) (fraction + start);
+    }
+
+    public SYMBOL getWinner() {
+        return winningSymbol;
     }
 }
