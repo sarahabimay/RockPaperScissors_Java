@@ -7,13 +7,13 @@ public class CLI implements UserInterface {
     private PrintStream writeStream;
     private BufferedReader readStream;
     private Game game;
-    private SYMBOL consoleSymbol;
+    private Symbol consoleSymbol;
 
     public CLI() {
         this.writeStream = new PrintStream(System.out);
         this.readStream = new BufferedReader(new InputStreamReader(System.in));
         this.game = new Game();
-        SYMBOL.setOrdinalToSymbol();
+        Symbol.setOrdinalToSymbol();
     }
 
     public String displayGreeting() {
@@ -22,10 +22,10 @@ public class CLI implements UserInterface {
         return greeting;
     }
 
-    public SYMBOL requestConsoleMove() {
+    public Symbol requestConsoleMove() {
         while (consoleSymbol == null) {
             writeStream.println("Please enter Rock(1), Paper(2) or Scissors(3): \n");
-            consoleSymbol = SYMBOL.getSymbolFromOrdinal(readInput());
+            consoleSymbol = Symbol.getSymbolFromOrdinal(readInput());
         }
         return consoleSymbol;
     }
@@ -39,11 +39,11 @@ public class CLI implements UserInterface {
         writeStream.println(String.format("And the winner is: %s \n", game.getWinner()));
     }
 
-    public void displayConsoleMove(SYMBOL symbol) {
+    public void displayConsoleMove(Symbol symbol) {
         writeStream.println(String.format("You have selected: %s \n", symbol));
     }
 
-    public void displayAIMove(SYMBOL symbol) {
+    public void displayAIMove(Symbol symbol) {
         writeStream.println(String.format("AI Player selected: %s \n", symbol));
     }
 
@@ -55,7 +55,7 @@ public class CLI implements UserInterface {
         playAgain();
     }
 
-    private SYMBOL playAgainstAI() {
+    private Symbol playAgainstAI() {
         displayAIMove(game.generateAIMove());
         return game.startGame(consoleSymbol);
     }

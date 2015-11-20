@@ -3,46 +3,47 @@ import java.util.Random;
 public class Game {
 
     private Rules rules;
-    private SYMBOL aiPlayer;
-    private SYMBOL winningSymbol;
+    private Symbol aiPlayer;
+    private Symbol winningSymbol;
 
     public Game() {
         aiPlayer = null;
         rules = new Rules();
-        SYMBOL.setOrdinalToSymbol();
+        Symbol.setOrdinalToSymbol();
     }
 
-    public SYMBOL generateAIMove() {
-        int range = SYMBOL.ordinalToSymbol.size();
+    public Symbol generateAIMove() {
+        int range = Symbol.ordinalToSymbol.size();
         aiPlayer = getRandomSymbolInRange(range);
         return aiPlayer;
     }
 
-    SYMBOL play(SYMBOL symbol1, SYMBOL symbol2) {
-        return rules.decideWinner(symbol1, symbol2);
-    }
 
-    public SYMBOL startGame(SYMBOL inputMove) {
+    public Symbol startGame(Symbol inputMove) {
         winningSymbol = play(inputMove, aiPlayer);
         return winningSymbol;
     }
 
-    private SYMBOL getRandomSymbolInRange(int range) {
-        int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
-        return SYMBOL.getSymbolFromOrdinal(randomOrdinal);
+    public Symbol getWinner() {
+        return winningSymbol;
     }
 
-    long randomFractionFromRange(long range) {
+    Symbol play(Symbol symbol1, Symbol symbol2) {
+        return rules.decideWinner(symbol1, symbol2);
+    }
+
+    private Symbol getRandomSymbolInRange(int range) {
+        int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
+        return Symbol.getSymbolFromOrdinal(randomOrdinal);
+    }
+
+    private long randomFractionFromRange(long range) {
         Random randomGenerator = new Random();
         return (long) (range * randomGenerator.nextDouble());
     }
 
-    int randomNumberInRange(long fraction) {
+    private int randomNumberInRange(long fraction) {
         int start = 1;
         return (int) (fraction + start);
-    }
-
-    public SYMBOL getWinner() {
-        return winningSymbol;
     }
 }

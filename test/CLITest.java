@@ -24,35 +24,35 @@ public class CLITest {
     }
     @Test
     public void requestHumanMove(){
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.SCISSORS}));
-        assertEquals(SYMBOL.SCISSORS, fakeCLI.requestConsoleMove());
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.SCISSORS}));
+        assertEquals(Symbol.SCISSORS, fakeCLI.requestConsoleMove());
         assertEquals(true, fakeCLI.hasRequestConsoleMoveBeenCalled());
     }
 
     @Test
     public void displayHumanChoice() {
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.ROCK}));
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
         fakeCLI.play();
         assertEquals(true, fakeCLI.hasUserChoiceBeenShown());
     }
 
     @Test
     public void displayAIChoice() {
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.ROCK}));
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
         fakeCLI.play();
         assertEquals(true, fakeCLI.hasAIChoiceBeenShown());
     }
 
     @Test
     public void displayResult() {
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.ROCK}));
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
         fakeCLI.play();
         assertEquals(true, fakeCLI.hasResultBeenDisplayed());
     }
 
     @Test
     public void displayReplayOption() {
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.ROCK, SYMBOL.PAPER}));
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK, Symbol.PAPER}));
         fakeCLI.dummyReplayChoice(1);
         fakeCLI.play();
         assertEquals(true, fakeCLI.hasReplayChoiceBeenDisplayed());
@@ -61,7 +61,7 @@ public class CLITest {
 
     @Test
     public void enterHumanMoveAndPlayGame() {
-        fakeCLI.addDummyMoves(aListOfMoves(new SYMBOL[]{SYMBOL.ROCK}));
+        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
         fakeCLI.play();
         assertEquals(true, fakeCLI.hasDisplayGreetingBeenCalled());
         assertEquals(true, fakeCLI.hasRequestConsoleMoveBeenCalled());
@@ -69,8 +69,8 @@ public class CLITest {
         assertEquals(true, fakeCLI.hasResultBeenDisplayed());
     }
 
-    public List<SYMBOL> aListOfMoves(SYMBOL[] moves) {
-        List<SYMBOL> listOfMoves = new ArrayList<>();
+    public List<Symbol> aListOfMoves(Symbol[] moves) {
+        List<Symbol> listOfMoves = new ArrayList<>();
         for (int i = 0; i < moves.length; i++) {
             listOfMoves.add(moves[i]);
         }

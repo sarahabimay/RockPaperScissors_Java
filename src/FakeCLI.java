@@ -6,15 +6,15 @@ public class FakeCLI implements UserInterface {
     private boolean hasDisplayGreetingBeenCalled = false;
     private boolean hasRequestConsoleMoveBeenCalled = false;
     private boolean hasPlayBeenCalled = false;
-    private List<SYMBOL> dummyMoves = new ArrayList<>();
-    private SYMBOL consoleSymbol;
+    private List<Symbol> dummyMoves = new ArrayList<>();
+    private Symbol consoleSymbol;
     private boolean hasResultBeenDisplayed = false;
     private boolean hasUserChoiceBeenShown = false;
     private boolean hasAIChoiceBeenShown = false;
     private boolean hasReplayChoiceBeenDisplayed = false;
     private int dummyReplayChoice = 0;
 
-    public SYMBOL getConsoleMove() {
+    public Symbol getConsoleMove() {
         return consoleSymbol;
     }
 
@@ -23,7 +23,7 @@ public class FakeCLI implements UserInterface {
         return "Welcome to the Rock Paper Scissors Game.";
     }
 
-    public SYMBOL requestConsoleMove() {
+    public Symbol requestConsoleMove() {
         hasRequestConsoleMoveBeenCalled = true;
         consoleSymbol = dummyMoves.remove(0);
         return consoleSymbol;
@@ -33,11 +33,11 @@ public class FakeCLI implements UserInterface {
         hasResultBeenDisplayed = true;
     }
 
-    public void displayConsoleMove(SYMBOL symbol) {
+    public void displayConsoleMove(Symbol symbol) {
         hasUserChoiceBeenShown = true;
     }
 
-    public void displayAIMove(SYMBOL symbol) {
+    public void displayAIMove(Symbol symbol) {
         hasAIChoiceBeenShown = true;
     }
 
@@ -83,7 +83,7 @@ public class FakeCLI implements UserInterface {
         return hasReplayChoiceBeenDisplayed;
     }
 
-    public void addDummyMoves(List<SYMBOL> symbols) {
+    public void addDummyMoves(List<Symbol> symbols) {
         dummyMoves = symbols;
     }
 
@@ -111,6 +111,4 @@ public class FakeCLI implements UserInterface {
         }
         return false;
     }
-
-
 }
