@@ -3,8 +3,8 @@ import java.util.Map;
 
 public enum Symbol {
     ROCK,
-    SCISSORS,
-    PAPER;
+    PAPER,
+    SCISSORS;
 
     static Map<Integer, Symbol> ordinalToSymbol = new HashMap<>();
 

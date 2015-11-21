@@ -9,7 +9,7 @@ public class GameTest {
 
     @Before
     public void setUp() {
-        game = new Game();
+        game = new Game(new Rules());
     }
 
     @Test
@@ -28,6 +28,6 @@ public class GameTest {
     public void playAGame() {
         Symbol humanMoveFromConsole = Symbol.PAPER;
         game.generateAIMove();
-        assertEquals(Symbol.class, game.startGame(humanMoveFromConsole).getClass());
+        assertEquals(Symbol.class, game.passConsoleMoveToGameThenPlay(humanMoveFromConsole).getClass());
     }
 }

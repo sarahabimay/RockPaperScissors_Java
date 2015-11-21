@@ -6,9 +6,9 @@ public class Game {
     private Symbol aiPlayer;
     private Symbol winningSymbol;
 
-    public Game() {
+    public Game(Rules rules) {
         aiPlayer = null;
-        rules = new Rules();
+        this.rules = rules;
         Symbol.setOrdinalToSymbol();
     }
 
@@ -19,7 +19,7 @@ public class Game {
     }
 
 
-    public Symbol startGame(Symbol inputMove) {
+    public Symbol passConsoleMoveToGameThenPlay(Symbol inputMove) {
         winningSymbol = play(inputMove, aiPlayer);
         return winningSymbol;
     }

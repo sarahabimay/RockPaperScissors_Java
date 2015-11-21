@@ -1,80 +1,81 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class CLITest {
 
     private CLI cli;
-    private FakeCLI fakeCLI;
+    private OutputStream output;
+    private PrintStream printStream;
+    private Game game;
 
     @Before
     public void setUp() {
-        cli = new CLI();
-        fakeCLI = new FakeCLI();
+        output = new ByteArrayOutputStream();
+        printStream = new PrintStream(output);
+        game = new Game(new Rules());
+        InputStream inputStream = new ByteArrayInputStream("".getBytes());
+        cli = new CLI(inputStream, printStream, game);
     }
 
     @Test
     public void displayGreeting() {
-        fakeCLI.displayGreeting();
-        assertEquals(true, fakeCLI.hasDisplayGreetingBeenCalled());
-    }
-    @Test
-    public void requestHumanMove(){
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.SCISSORS}));
-        assertEquals(Symbol.SCISSORS, fakeCLI.requestConsoleMove());
-        assertEquals(true, fakeCLI.hasRequestConsoleMoveBeenCalled());
+        cli.displayGreeting();
+        String expected = "Welcome to the Rock Paper Scissors Game.\n\n";
+        assertThat(output.toString(), containsString(expected));
     }
 
     @Test
-    public void displayHumanChoice() {
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
-        fakeCLI.play();
-        assertEquals(true, fakeCLI.hasUserChoiceBeenShown());
+    public void displayConsoleMoveRequest() {
+        InputStream inputStream = new ByteArrayInputStream("3\n".getBytes());
+        CLI cli = new CLI(inputStream, printStream, game);
+        cli.requestConsoleMove();
+        String expected = cli.CONSOLE_MOVE_REQUEST;
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
+    public void requestHumanMove() {
+        InputStream inputStream = new ByteArrayInputStream("3\n".getBytes());
+        CLI cli = new CLI(inputStream, printStream, game);
+        assertThat(cli.requestConsoleMove(), is(Symbol.SCISSORS));
+    }
+
+    @Test
+    public void displayHumanChoicePrompt() {
+        cli.displayConsoleMove(Symbol.ROCK);
+        String expected = String.format(cli.CONSOLE_MOVE_DISPLAY, Symbol.ROCK);
+        assertThat(output.toString(), containsString(expected));
     }
 
     @Test
     public void displayAIChoice() {
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
-        fakeCLI.play();
-        assertEquals(true, fakeCLI.hasAIChoiceBeenShown());
+        cli.displayAIMove(Symbol.ROCK);
+        String expected = String.format(cli.AI_MOVE_DISPLAY, Symbol.ROCK);
+        assertThat(output.toString(), containsString(expected));
     }
 
     @Test
     public void displayResult() {
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
-        fakeCLI.play();
-        assertEquals(true, fakeCLI.hasResultBeenDisplayed());
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CLI cli = new CLI(inputStream, printStream, game);
+        cli.play();
+        String expected = String.format(cli.RESULT_DISPLAY, game.getWinner());
+        assertThat(output.toString(), containsString(expected));
     }
 
     @Test
     public void displayReplayOption() {
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK, Symbol.PAPER}));
-        fakeCLI.dummyReplayChoice(1);
-        fakeCLI.play();
-        assertEquals(true, fakeCLI.hasReplayChoiceBeenDisplayed());
-
+        byte[] buf = "1\n2\n".getBytes();
+        InputStream inputStream = new ByteArrayInputStream(buf);
+        CLI cli = new CLI(inputStream, printStream, game);
+        cli.play();
+        String expected = cli.REPLAY_REQUEST;
+        assertThat(output.toString(), containsString(expected));
     }
-
-    @Test
-    public void enterHumanMoveAndPlayGame() {
-        fakeCLI.addDummyMoves(aListOfMoves(new Symbol[]{Symbol.ROCK}));
-        fakeCLI.play();
-        assertEquals(true, fakeCLI.hasDisplayGreetingBeenCalled());
-        assertEquals(true, fakeCLI.hasRequestConsoleMoveBeenCalled());
-        assertEquals(true, fakeCLI.hasPlayBeenCalled());
-        assertEquals(true, fakeCLI.hasResultBeenDisplayed());
-    }
-
-    public List<Symbol> aListOfMoves(Symbol[] moves) {
-        List<Symbol> listOfMoves = new ArrayList<>();
-        for (int i = 0; i < moves.length; i++) {
-            listOfMoves.add(moves[i]);
-        }
-        return listOfMoves;
-    }
-
 }
