@@ -1,4 +1,5 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -16,11 +17,11 @@ public class CLITest {
 
     @Before
     public void setUp() {
+        game = new Game(new Rules());
         output = new ByteArrayOutputStream();
         printStream = new PrintStream(output);
-        game = new Game(new Rules());
         InputStream inputStream = new ByteArrayInputStream("".getBytes());
-        cli = new CLI(inputStream, printStream, game);
+        cli = new CLI(inputStream, printStream, new Game(new Rules()));
     }
 
     @Test
@@ -40,14 +41,17 @@ public class CLITest {
     }
 
     @Test
-    public void requestHumanMove() {
+    @Ignore
+    public void requestConsoleMove() {
         InputStream inputStream = new ByteArrayInputStream("3\n".getBytes());
         CLI cli = new CLI(inputStream, printStream, game);
-        assertThat(cli.requestConsoleMove(), is(Symbol.SCISSORS));
+        cli.displayConsoleMove(cli.requestConsoleMove());
+        String expected = cli.CONSOLE_MOVE_REQUEST + String.format(cli.CONSOLE_MOVE_DISPLAY, Symbol.SCISSORS);
+        assertThat(output.toString(), is(expected));
     }
 
     @Test
-    public void displayHumanChoicePrompt() {
+    public void displayConsoleChoicePrompt() {
         cli.displayConsoleMove(Symbol.ROCK);
         String expected = String.format(cli.CONSOLE_MOVE_DISPLAY, Symbol.ROCK);
         assertThat(output.toString(), containsString(expected));

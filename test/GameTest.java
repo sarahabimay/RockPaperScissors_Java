@@ -21,13 +21,8 @@ public class GameTest {
     public void playHumanMoveAgainstAI() {
         Symbol humansMove = Symbol.PAPER;
         Symbol aisMove = Symbol.ROCK;
-        assertEquals(Symbol.PAPER, game.play(humansMove, aisMove));
-    }
-
-    @Test
-    public void playAGame() {
-        Symbol humanMoveFromConsole = Symbol.PAPER;
-        game.generateAIMove();
-        assertEquals(Symbol.class, game.passConsoleMoveToGameThenPlay(humanMoveFromConsole).getClass());
+        game.addPlayerMove(humansMove);
+        game.addPlayerMove(aisMove);
+        assertEquals(Symbol.PAPER, game.playGame());
     }
 }

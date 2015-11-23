@@ -1,5 +1,5 @@
 public interface UserInterface {
-    String displayGreeting();
+    void displayGreeting();
 
     Symbol requestConsoleMove();
 

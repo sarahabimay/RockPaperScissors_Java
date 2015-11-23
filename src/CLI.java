@@ -10,7 +10,6 @@ public class CLI implements UserInterface {
     private BufferedReader readStream;
     private PrintStream writeStream;
     private Game game;
-    private Symbol consoleSymbol;
 
     public CLI(InputStream inputStream, PrintStream outputStream, Game game) {
         this.readStream = new BufferedReader(new InputStreamReader(inputStream));
@@ -19,17 +18,17 @@ public class CLI implements UserInterface {
         Symbol.setOrdinalToSymbol();
     }
 
-    public String displayGreeting() {
-        String greeting = GAME_GREETING;
-        writeStream.println(greeting);
-        return greeting;
+    public void displayGreeting() {
+        writeStream.println(GAME_GREETING);
     }
 
     public Symbol requestConsoleMove() {
+        Symbol consoleSymbol = null;
         while (consoleSymbol == null) {
             writeStream.println(CONSOLE_MOVE_REQUEST);
             consoleSymbol = Symbol.getSymbolFromOrdinal(readInput());
         }
+        game.addPlayerMove(consoleSymbol);
         return consoleSymbol;
     }
 
@@ -51,27 +50,29 @@ public class CLI implements UserInterface {
     }
 
     public void play() {
-        displayGreeting();
-        displayConsoleMove(requestConsoleMove());
-        playAgainstAI();
-        displayResult();
-        playAgain();
+        do {
+            displayGreeting();
+            displayConsoleMove(requestConsoleMove());
+            playAgainstAI();
+            displayResult();
+        }
+        while(playAgain());
     }
 
     private Symbol playAgainstAI() {
         displayAIMove(game.generateAIMove());
-        return game.passConsoleMoveToGameThenPlay(consoleSymbol);
+        return game.playGame();
     }
 
-    private void playAgain() {
-        if (requestReplay()) {
+    private boolean playAgain() {
+        boolean replyChoice = requestReplay();
+        if (replyChoice) {
             reset();
-            play();
         }
+        return replyChoice;
     }
 
     private void reset() {
-        consoleSymbol = null;
         game = new Game(new Rules());
     }
 
@@ -81,7 +82,6 @@ public class CLI implements UserInterface {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {
-            return 0;
         }
         return 0;
     }

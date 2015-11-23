@@ -1,35 +1,33 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
 
     private Rules rules;
-    private Symbol aiPlayer;
-    private Symbol winningSymbol;
+    private final List<Symbol> moves = new ArrayList<>();
 
     public Game(Rules rules) {
-        aiPlayer = null;
         this.rules = rules;
         Symbol.setOrdinalToSymbol();
     }
 
     public Symbol generateAIMove() {
-        int range = Symbol.ordinalToSymbol.size();
-        aiPlayer = getRandomSymbolInRange(range);
+        Symbol aiPlayer = getRandomSymbolInRange(Symbol.ordinalToSymbol.size());
+        moves.add(aiPlayer);
         return aiPlayer;
     }
 
+    public void addPlayerMove(Symbol playerMove) {
+        moves.add(playerMove);
+    }
 
-    public Symbol passConsoleMoveToGameThenPlay(Symbol inputMove) {
-        winningSymbol = play(inputMove, aiPlayer);
-        return winningSymbol;
+    public Symbol playGame() {
+        return moves.stream().reduce((a, b) -> rules.decideWinner(a, b)).get();
     }
 
     public Symbol getWinner() {
-        return winningSymbol;
-    }
-
-    Symbol play(Symbol symbol1, Symbol symbol2) {
-        return rules.decideWinner(symbol1, symbol2);
+        return moves.stream().reduce((a, b) -> rules.decideWinner(a, b)).get();
     }
 
     private Symbol getRandomSymbolInRange(int range) {
