@@ -9,25 +9,20 @@ public class GameTest {
 
     @Before
     public void setUp() {
-        game = new Game();
+        game = new Game(new Rules());
     }
 
     @Test
     public void generateAIMove() {
-        assertEquals(SYMBOL.class, game.generateAIMove().getClass());
+        assertEquals(Symbol.class, game.generateAIMove().getClass());
     }
 
     @Test
     public void playHumanMoveAgainstAI() {
-        SYMBOL humansMove = SYMBOL.PAPER;
-        SYMBOL aisMove = SYMBOL.ROCK;
-        assertEquals(SYMBOL.PAPER, game.play(humansMove, aisMove));
-    }
-
-    @Test
-    public void playAGame() {
-        SYMBOL humanMoveFromConsole = SYMBOL.PAPER;
-        game.generateAIMove();
-        assertEquals(SYMBOL.class, game.startGame(humanMoveFromConsole).getClass());
+        Symbol humansMove = Symbol.PAPER;
+        Symbol aisMove = Symbol.ROCK;
+        game.addPlayerMove(humansMove);
+        game.addPlayerMove(aisMove);
+        assertEquals(Symbol.PAPER, game.playGame());
     }
 }

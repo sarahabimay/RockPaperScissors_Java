@@ -1,48 +1,47 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
 
     private Rules rules;
-    private SYMBOL aiPlayer;
-    private SYMBOL winningSymbol;
+    private final List<Symbol> moves = new ArrayList<>();
 
-    public Game() {
-        aiPlayer = null;
-        rules = new Rules();
-        SYMBOL.setOrdinalToSymbol();
+    public Game(Rules rules) {
+        this.rules = rules;
+        Symbol.setOrdinalToSymbol();
     }
 
-    public SYMBOL generateAIMove() {
-        int range = SYMBOL.ordinalToSymbol.size();
-        aiPlayer = getRandomSymbolInRange(range);
+    public Symbol generateAIMove() {
+        Symbol aiPlayer = getRandomSymbolInRange(Symbol.ordinalToSymbol.size());
+        moves.add(aiPlayer);
         return aiPlayer;
     }
 
-    SYMBOL play(SYMBOL symbol1, SYMBOL symbol2) {
-        return rules.decideWinner(symbol1, symbol2);
+    public void addPlayerMove(Symbol playerMove) {
+        moves.add(playerMove);
     }
 
-    public SYMBOL startGame(SYMBOL inputMove) {
-        winningSymbol = play(inputMove, aiPlayer);
-        return winningSymbol;
+    public Symbol playGame() {
+        return moves.stream().reduce((a, b) -> rules.decideWinner(a, b)).get();
     }
 
-    private SYMBOL getRandomSymbolInRange(int range) {
+    public Symbol getWinner() {
+        return moves.stream().reduce((a, b) -> rules.decideWinner(a, b)).get();
+    }
+
+    private Symbol getRandomSymbolInRange(int range) {
         int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
-        return SYMBOL.getSymbolFromOrdinal(randomOrdinal);
+        return Symbol.getSymbolFromOrdinal(randomOrdinal);
     }
 
-    long randomFractionFromRange(long range) {
+    private long randomFractionFromRange(long range) {
         Random randomGenerator = new Random();
         return (long) (range * randomGenerator.nextDouble());
     }
 
-    int randomNumberInRange(long fraction) {
+    private int randomNumberInRange(long fraction) {
         int start = 1;
         return (int) (fraction + start);
-    }
-
-    public SYMBOL getWinner() {
-        return winningSymbol;
     }
 }
