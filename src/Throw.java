@@ -1,12 +1,16 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public enum Symbol {
-    ROCK,
-    PAPER,
-    SCISSORS;
+public enum Throw {
+    ROCK(1),
+    PAPER(2),
+    SCISSORS(3);
 
-    static Map<Integer, Symbol> ordinalToSymbol = new HashMap<>();
+    static Map<Integer, Throw> ordinalToSymbol = new HashMap<>();
+
+    Throw(int identifier) {
+
+    }
 
     public static void setOrdinalToSymbol() {
         ordinalToSymbol.put(1, ROCK);
@@ -14,7 +18,7 @@ public enum Symbol {
         ordinalToSymbol.put(3, SCISSORS);
     }
 
-    public static Symbol getSymbolFromOrdinal(int ordinal) {
+    public static Throw getSymbolFromOrdinal(int ordinal) {
         return ordinalToSymbol.get(ordinal);
     }
 }
