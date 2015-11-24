@@ -99,7 +99,6 @@ public class CommandLineUI {
     private Optional<ReplayOption> convertToReplayOption(int replayChoice) {
         for (ReplayOption option : ReplayOption.values()) {
             if (option.equalsChoice(replayChoice)) {
-                return of(option);
             }
         }
         return Optional.empty();
@@ -136,6 +135,5 @@ public class CommandLineUI {
 
         public boolean equalsChoice(int choice) {
             return choiceOption == choice;
-        }
     }
 }
