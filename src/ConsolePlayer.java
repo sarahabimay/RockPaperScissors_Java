@@ -1,4 +1,4 @@
-public class ConsolePlayer {
+public class ConsolePlayer implements Player {
     private Throw consoleThrow;
 
     public ConsolePlayer(Throw aThrow) {
