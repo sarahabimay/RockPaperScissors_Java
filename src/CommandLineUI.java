@@ -21,9 +21,21 @@ public class CommandLineUI {
     }
 
     public void displayGreeting() {
-        writeStream.println(GREETING_PROMPT);
+        displayMessageToConsole(GREETING_PROMPT);
     }
 
+    public void displayAIMove(Throw rock) {
+        displayMessageToConsole(String.format(AI_MOVE, rock));
+    }
+
+    public void displayResult(Optional<Throw> result) {
+        if (result.isPresent()){
+            announceWin(result);
+        }
+        else{
+            announceDraw();
+        }
+    }
     public Throw requestConsoleTurn() {
         Throw consoleThrow = getMoveFromConsole();
         displayConsoleMove(consoleThrow);
@@ -40,19 +52,23 @@ public class CommandLineUI {
     }
 
     private void displayConsoleMove(Throw consoleThrow) {
-        writeStream.println(String.format(CONSOLE_MOVE, consoleThrow));
+        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
     }
 
     private Throw getMoveFromConsole() {
         Optional<Throw> consoleThrow = Optional.empty();
         while (!isValidThrow(consoleThrow)) {
-            writeStream.println(THROW_CHOICE);
+            displayMessageToConsole(THROW_CHOICE);
             consoleThrow = convertToThrow(readLine());
             if (!isValidThrow(consoleThrow)) {
-                writeStream.println(INVALID_CHOICE);
+                displayMessageToConsole(INVALID_CHOICE);
             }
         }
         return consoleThrow.get();
+    }
+
+    private void displayMessageToConsole(String throw_choice) {
+        writeStream.println(throw_choice);
     }
 
     private Optional<Throw> convertToThrow(int consoleMove) {
@@ -67,10 +83,10 @@ public class CommandLineUI {
     private Optional<ReplayOption> getReplayOption() {
         Optional<ReplayOption> replayOption = Optional.empty();
         while (!isValidReplayChoice(replayOption)) {
-            writeStream.println(REPLAY_OPTION);
+            displayMessageToConsole(REPLAY_OPTION);
             replayOption = convertToReplayOption(readLine());
             if (!isValidReplayChoice(replayOption)) {
-                writeStream.println(INVALID_CHOICE);
+                displayMessageToConsole(INVALID_CHOICE);
             }
         }
         return replayOption;
@@ -99,17 +115,13 @@ public class CommandLineUI {
         return 0;
     }
 
-    public void displayAIMove(Throw rock) {
-        writeStream.println(String.format(AI_MOVE, rock));
+
+    private void announceDraw() {
+        displayMessageToConsole(ANNOUNCE_DRAW);
     }
 
-    public void displayResult(Optional<Throw> result) {
-        if (result.isPresent()){
-            writeStream.println(String.format(WINNING_RESULT, result));
-        }
-        else{
-            writeStream.println(ANNOUNCE_DRAW);
-        }
+    private void announceWin(Optional<Throw> result) {
+        displayMessageToConsole(String.format(WINNING_RESULT, result.get()));
     }
 
     private enum ReplayOption {
