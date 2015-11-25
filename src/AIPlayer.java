@@ -1,4 +1,7 @@
+import java.util.Optional;
 import java.util.Random;
+
+import static java.util.Optional.of;
 
 public class AIPlayer implements Player {
     private Throw aThrow;
@@ -14,9 +17,17 @@ public class AIPlayer implements Player {
 
     private Throw getRandomSymbolInRange(int range) {
         int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
-        return Throw.values()[randomOrdinal];
+        return convertToThrow(randomOrdinal).get();
     }
 
+    private Optional<Throw> convertToThrow(int throwIdentifier) {
+        for (Throw aThrow : Throw.values()) {
+            if (aThrow.equalsChoice(throwIdentifier)) {
+                return of(aThrow);
+            }
+        }
+        return Optional.empty();
+    }
     private long randomFractionFromRange(long range) {
         Random randomGenerator = new Random();
         return (long) (range * randomGenerator.nextDouble());
