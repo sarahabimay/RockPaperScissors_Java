@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
@@ -11,11 +12,14 @@ public class CommandLineUITest {
     private OutputStream output;
     private PrintStream printStream;
     private String SCISSORS_THROW;
+    private CommandLineUI cli;
 
     @Before
     public void setUp() {
         output = new ByteArrayOutputStream();
         printStream = new PrintStream(output);
+        InputStream inputStream = new ByteArrayInputStream("".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
     }
 
     @Test
@@ -33,6 +37,13 @@ public class CommandLineUITest {
         CommandLineUI cli = new CommandLineUI(printStream);
         cli.requestConsoleMove();
         String expected = cli.CONSOLE_MOVE_REQUEST;
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
+    public void displayConsoleChoicePrompt() {
+        cli.displayConsoleMove(Optional.of(Throw.ROCK));
+        String expected = String.format(cli.CONSOLE_MOVE_DISPLAY, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
 
