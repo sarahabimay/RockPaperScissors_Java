@@ -69,17 +69,28 @@ public class GameTest {
     }
 
     @Test
-    public void playTheGameAndDisplayResult() {
+    public void playTheGameAndDisplayWinningResult() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         Game game = new Game(cli, new Rules());
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
-        Optional<Throw> result = game.throwPlayerMoves(consolePlayer.getThrow(), aiPlayer.getThrow() );
+        Optional<Throw> result = game.throwPlayerMoves(consolePlayer.getThrow(), aiPlayer.getThrow());
         game.askUIToDisplayResult(result);
         String expected = String.format(cli.WINNING_RESULT, Throw.PAPER);
         assertThat(output.toString(), containsString(expected));
+    }
 
+    @Test
+    public void playTheGameAndDisplayDrawResult() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
+        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.ROCK);
+        Optional<Throw> result = game.throwPlayerMoves(consolePlayer.getThrow(), aiPlayer.getThrow());
+        game.askUIToDisplayResult(result);
+        assertThat(output.toString(), containsString(cli.ANNOUNCE_DRAW));
     }
 
     private FakeAIPlayer generateFakeAIPlayerAndMove(Throw dummyMove) {
