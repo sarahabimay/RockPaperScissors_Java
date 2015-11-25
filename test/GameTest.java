@@ -42,8 +42,16 @@ public class GameTest {
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         Game game = new Game(cli);
         game.obtainConsoleMoveAndDisplay();
-        String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
         assertEquals(1, game.getPlayers().size());
-        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
+    public void createAIPlayer() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli);
+        game.obtainConsoleMoveAndDisplay();
+        game.createAIPlayer();
+        assertEquals(2, game.getPlayers().size());
     }
 }

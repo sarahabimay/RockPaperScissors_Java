@@ -22,4 +22,8 @@ public class Game {
     public List<Player> getPlayers() {
         return this.players;
     }
+
+    public void createAIPlayer() {
+        this.players.add(new AIPlayer());
+    }
 }
