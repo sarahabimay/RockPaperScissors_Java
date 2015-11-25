@@ -8,4 +8,8 @@ public class Game {
     public void askUIToDisplayGreeting() {
         this.userInterface.displayGreeting();
     }
+
+    public void obtainConsoleMoveAndDisplay() {
+        Throw consoleThrow = this.userInterface.requestConsoleMove();
+    }
 }

@@ -24,4 +24,14 @@ public class GameTest {
         game.askUIToDisplayGreeting();
         assertThat(output.toString(), containsString(cli.GREETING_PROMPT));
     }
+
+    @Test
+    public void askUIToGetAndDisplayConsoleUserPrompt() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli);
+        game.obtainConsoleMoveAndDisplay();
+        String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
+        assertThat(output.toString(), containsString(expected));
+    }
 }
