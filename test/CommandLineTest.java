@@ -66,4 +66,13 @@ public class CommandLineTest implements UserInterface {
         cli.displayGreeting();
         assertThat(output.toString(), containsString(cli.GREETING_PROMPT));
     }
+
+    @Test
+    public void requestDisplayConsoleMove() {
+        InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
+        cli.requestConsoleTurn();
+        String expected = String.format(cli.CONSOLE_MOVE, Throw.PAPER);
+        assertThat(output.toString(), containsString(expected));
+    }
 }

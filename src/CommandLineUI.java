@@ -4,10 +4,11 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI {
+    public String CONSOLE_MOVE = "You have thrown: %s \n";
     public String INVALID_CHOICE = "Invalid selection. \n";
     public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
     public String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
-    public String GREETING_PROMPT = "Rock Paper Scissors Game!";
+    public String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -29,8 +30,13 @@ public class CommandLineUI {
                 writeStream.println(INVALID_CHOICE);
             }
         }
-        writeStream.println(String.format("Your move was: %s", consoleThrow.get()));
+
+        displayConsoleMove(consoleThrow);
         return consoleThrow.get();
+    }
+
+    private void displayConsoleMove(Optional<Throw> format) {
+        writeStream.println(String.format(CONSOLE_MOVE, format.get()));
     }
 
     public boolean isValidThrow(Optional<Throw> consoleMove) {
@@ -79,6 +85,10 @@ public class CommandLineUI {
         } catch (NumberFormatException e) {
         }
         return 0;
+    }
+
+    public void displayConsoleMove() {
+
     }
 
 
