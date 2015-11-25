@@ -3,7 +3,7 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 
-public class CommandLineUI {
+public class CommandLineUI implements UserInterface {
     public String ANNOUNCE_DRAW = "The game is a draw!";
     public String WINNING_RESULT = "And the winner is: %s \n";
     public String AI_MOVE = "AI player has thrown: %s \n";
@@ -29,14 +29,14 @@ public class CommandLineUI {
     }
 
     public void displayResult(Optional<Throw> result) {
-        if (result.isPresent()){
+        if (result.isPresent()) {
             announceWin(result);
-        }
-        else{
+        } else {
             announceDraw();
         }
     }
-    public Throw requestConsoleTurn() {
+
+    public Throw requestConsoleMove() {
         Throw consoleThrow = getMoveFromConsole();
         displayConsoleMove(consoleThrow);
         return consoleThrow;
@@ -51,7 +51,7 @@ public class CommandLineUI {
         return consoleMove.isPresent();
     }
 
-    private void displayConsoleMove(Throw consoleThrow) {
+    public void displayConsoleMove(Throw consoleThrow) {
         displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
     }
 
