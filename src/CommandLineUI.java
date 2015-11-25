@@ -22,6 +22,25 @@ public class CommandLineUI {
     }
 
     public Throw requestConsoleTurn() {
+        Throw consoleThrow = getMoveFromConsole();
+        displayConsoleMove(consoleThrow);
+        return consoleThrow;
+    }
+
+    public boolean requestReplay() {
+        Optional<ReplayOption> replayOption = getReplayOption();
+        return replayOption.isPresent();
+    }
+
+    public boolean isValidThrow(Optional<Throw> consoleMove) {
+        return consoleMove.isPresent();
+    }
+
+    private void displayConsoleMove(Throw consoleThrow) {
+        writeStream.println(String.format(CONSOLE_MOVE, consoleThrow));
+    }
+
+    private Throw getMoveFromConsole() {
         Optional<Throw> consoleThrow = Optional.empty();
         while (!isValidThrow(consoleThrow)) {
             writeStream.println(THROW_CHOICE);
@@ -30,20 +49,19 @@ public class CommandLineUI {
                 writeStream.println(INVALID_CHOICE);
             }
         }
-
-        displayConsoleMove(consoleThrow);
         return consoleThrow.get();
     }
 
-    private void displayConsoleMove(Optional<Throw> format) {
-        writeStream.println(String.format(CONSOLE_MOVE, format.get()));
+    private Optional<Throw> convertToThrow(int consoleMove) {
+        for (Throw aThrow : Throw.values()) {
+            if (aThrow.equalsChoice(consoleMove)) {
+                return of(aThrow);
+            }
+        }
+        return Optional.empty();
     }
 
-    public boolean isValidThrow(Optional<Throw> consoleMove) {
-        return consoleMove.isPresent();
-    }
-
-    public boolean requestReplay() {
+    private Optional<ReplayOption> getReplayOption() {
         Optional<ReplayOption> replayOption = Optional.empty();
         while (!isValidReplayChoice(replayOption)) {
             writeStream.println(REPLAY_OPTION);
@@ -52,6 +70,10 @@ public class CommandLineUI {
                 writeStream.println(INVALID_CHOICE);
             }
         }
+        return replayOption;
+    }
+
+    private boolean isValidReplayChoice(Optional<ReplayOption> replayOption) {
         return replayOption.isPresent();
     }
 
@@ -59,19 +81,6 @@ public class CommandLineUI {
         for (ReplayOption option : ReplayOption.values()) {
             if (option.equalsChoice(replayChoice)) {
                 return of(option);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private boolean isValidReplayChoice(Optional<ReplayOption> replayOption) {
-        return replayOption.isPresent();
-    }
-
-    private Optional<Throw> convertToThrow(int consoleMove) {
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.equalsChoice(consoleMove)) {
-                return of(aThrow);
             }
         }
         return Optional.empty();
