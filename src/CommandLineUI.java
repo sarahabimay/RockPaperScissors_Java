@@ -13,6 +13,7 @@ public class CommandLineUI {
     private PrintStream writeStream;
     private BufferedReader readStream;
 
+
     public CommandLineUI(PrintStream printStream) {
         this.writeStream = printStream;
     }
@@ -26,17 +27,17 @@ public class CommandLineUI {
         writeStream.println(GREETING_MESSAGE);
     }
 
-    public Optional<Throw> requestConsoleMove() {
+    public Throw requestConsoleMove() {
         Optional<Throw> consoleThrow = Optional.empty();
         while (!isValid(consoleThrow)) {
             writeStream.println(CONSOLE_MOVE_REQUEST);
             consoleThrow = convertToThrow(readInput());
         }
-        return consoleThrow;
+        return consoleThrow.get();
     }
 
-    public void displayConsoleMove(Optional<Throw> throwType) {
-        writeStream.println(String.format(CONSOLE_MOVE_DISPLAY, throwType.get()));
+    public void displayConsoleMove(Throw throwType) {
+        writeStream.println(String.format(CONSOLE_MOVE_DISPLAY, throwType));
     }
 
     public void displayAIMove(Throw aThrow) {
@@ -47,8 +48,45 @@ public class CommandLineUI {
         writeStream.println(String.format(RESULT_DISPLAY, aThrow));
     }
 
-    public void requestReplay() {
+    public int requestReplay() {
         writeStream.println(REPLAY_REQUEST);
+        int choice = readInput();
+        while (!validReplayChoice(choice)) {
+            writeStream.println(REPLAY_REQUEST);
+            choice = readInput();
+        }
+        return choice;
+    }
+
+    public void play() {
+        displayGreeting();
+        boolean replay = true;
+        while (replay) {
+            Throw aConsoleThrow = requestConsoleMove();
+            displayConsoleMove(aConsoleThrow);
+            Throw dummyAIThrow = dummySCISSORSAsAIThrow();
+            displayAIMove(dummyAIThrow);
+            Throw result = playAgainstAI(aConsoleThrow, dummyAIThrow);
+            displayResult(result);
+            replay = isPlayAgain(requestReplay());
+        }
+    }
+
+    private boolean validReplayChoice(int choice) {
+        return choice == 1 || choice == 2;
+    }
+
+    private boolean isPlayAgain(int replayChoice) {
+        return replayChoice == 1;
+    }
+
+    private Throw playAgainstAI(Throw aConsoleThrow, Throw dummyAIThrow) {
+        Rules rules = new Rules();
+        return rules.decideWinner(aConsoleThrow, dummyAIThrow);
+    }
+
+    private Throw dummySCISSORSAsAIThrow() {
+        return Throw.SCISSORS;
     }
 
     private int readInput() {

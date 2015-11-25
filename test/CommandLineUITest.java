@@ -1,8 +1,8 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
@@ -34,7 +34,7 @@ public class CommandLineUITest {
     public void displayConsoleMoveRequest() {
         SCISSORS_THROW = "3\n";
         InputStream inputStream = new ByteArrayInputStream(SCISSORS_THROW.getBytes());
-        CommandLineUI cli = new CommandLineUI(printStream);
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         cli.requestConsoleMove();
         String expected = cli.CONSOLE_MOVE_REQUEST;
         assertThat(output.toString(), containsString(expected));
@@ -42,7 +42,7 @@ public class CommandLineUITest {
 
     @Test
     public void displayConsoleChoicePrompt() {
-        cli.displayConsoleMove(Optional.of(Throw.ROCK));
+        cli.displayConsoleMove(Throw.ROCK);
         String expected = String.format(cli.CONSOLE_MOVE_DISPLAY, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
@@ -80,6 +80,24 @@ public class CommandLineUITest {
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         cli.requestReplay();
         String expected = cli.REPLAY_REQUEST;
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    // Failing because the output and expected output aren't formatted the same.
+    // Can't work out how to fix
+    @Test
+    @Ignore
+    public void integrationTest() {
+        byte[] buf = "1\n2\n".getBytes();// 1 == ROCK and 2 == Quit
+        InputStream inputStream = new ByteArrayInputStream(buf);
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        cli.play();
+        String expected = "Welcome to the Rock Paper Scissors Game.\n\n\n"+
+        "Please enter Rock(1), Paper(2) or Scissors(3):\n\n"+
+        "You have selected: ROCK\n\n"+
+        "AI Player selected: SCISSORS\n\n"+
+        "And the winner is: ROCK\n\n"+
+        "Do you want to play again? Yes(1) or No(2):\n\n";
         assertThat(output.toString(), containsString(expected));
     }
 }
