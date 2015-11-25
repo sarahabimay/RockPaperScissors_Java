@@ -4,6 +4,10 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI {
+    public String INVALID_CHOICE = "Invalid selection. \n";
+    public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
+    public String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
+    public String GREETING_PROMPT = "Rock Paper Scissors Game!";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -12,13 +16,17 @@ public class CommandLineUI {
         this.writeStream = printStream;
     }
 
+    public void displayGreeting() {
+        writeStream.println(GREETING_PROMPT);
+    }
+
     public Throw requestConsoleTurn() {
         Optional<Throw> consoleThrow = Optional.empty();
         while (!isValidThrow(consoleThrow)) {
-            writeStream.println("Please select Rock(1), Paper(2), or Scissors(3): \n");
+            writeStream.println(THROW_CHOICE);
             consoleThrow = convertToThrow(readLine());
             if (!isValidThrow(consoleThrow)) {
-                writeStream.println("Invalid choice. \n");
+                writeStream.println(INVALID_CHOICE);
             }
         }
         writeStream.println(String.format("Your move was: %s", consoleThrow.get()));
@@ -32,10 +40,10 @@ public class CommandLineUI {
     public boolean requestReplay() {
         Optional<ReplayOption> replayOption = Optional.empty();
         while (!isValidReplayChoice(replayOption)) {
-            writeStream.println("Do you want to play again? Yes(1) or No(2): \n");
+            writeStream.println(REPLAY_OPTION);
             replayOption = convertToReplayOption(readLine());
             if (!isValidReplayChoice(replayOption)) {
-                writeStream.println("Invalid selection: \n");
+                writeStream.println(INVALID_CHOICE);
             }
         }
         return replayOption.isPresent();
@@ -73,6 +81,7 @@ public class CommandLineUI {
         return 0;
     }
 
+
     private enum ReplayOption {
         REPLAY(1),
         QUIT(2);
@@ -83,7 +92,7 @@ public class CommandLineUI {
             this.choiceOption = choiceOption;
         }
 
-        public boolean equalsChoice(int choice){
+        public boolean equalsChoice(int choice) {
             return choiceOption == choice;
         }
     }
