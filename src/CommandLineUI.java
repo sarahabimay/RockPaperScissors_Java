@@ -1,4 +1,7 @@
 import java.io.*;
+import java.util.Optional;
+
+import static java.util.Optional.of;
 
 public class CommandLineUI {
     private PrintStream writeStream;
@@ -9,10 +12,20 @@ public class CommandLineUI {
         this.writeStream = printStream;
     }
 
-    public void requestConsoleTurn() {
+    public Throw requestConsoleTurn() {
         writeStream.println("Please select Rock(1), Paper(2), or Scissors(3): \n");
         int consoleMove = readLine();
         writeStream.println(String.format("Your move was: %s", consoleMove));
+        return convertToThrow(consoleMove).get();
+    }
+
+    private Optional<Throw> convertToThrow(int consoleMove) {
+        for (Throw aThrow : Throw.values()) {
+            if (aThrow.equals(consoleMove)){
+                return of(aThrow);
+            }
+        }
+        return Optional.empty();
     }
 
     private int readLine() {
@@ -23,5 +36,9 @@ public class CommandLineUI {
         } catch (NumberFormatException e) {
         }
         return 0;
+    }
+
+    public boolean isValidThrow(int consoleMove) {
+        return !convertToThrow(consoleMove).equals(Optional.empty());
     }
 }

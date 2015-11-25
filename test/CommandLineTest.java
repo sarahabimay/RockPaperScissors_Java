@@ -1,22 +1,32 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
 
 public class CommandLineTest implements UserInterface{
     private OutputStream output;
     private PrintStream printStream;
     private CommandLineUI cli;
 
-    @Test
-    public void requestHumanTurn() {
+    @Before
+    public void setUp() {
         output = new ByteArrayOutputStream();
         printStream = new PrintStream(output);
+    }
+
+    @Test
+    public void requestHumanTurn() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        cli.requestConsoleTurn();
-        assertThat(output.toString(), containsString("Your move was: 1"));
+        assertEquals(Throw.ROCK, cli.requestConsoleTurn());
+    }
+
+    @Test
+    public void humanTurnIsInvalid() {
+        InputStream inputStream = new ByteArrayInputStream("99\n".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
+        assertEquals(false, cli.isValidThrow(99));
     }
 }
