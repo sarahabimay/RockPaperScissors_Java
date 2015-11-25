@@ -63,4 +63,13 @@ public class CommandLineUITest {
         String expected = String.format(cli.AI_MOVE_DISPLAY, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
+
+    @Test
+    public void displayResult() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        cli.displayResult(Throw.ROCK);
+        String expected = String.format(cli.RESULT_DISPLAY, "ROCK");
+        assertThat(output.toString(), containsString(expected));
+    }
 }

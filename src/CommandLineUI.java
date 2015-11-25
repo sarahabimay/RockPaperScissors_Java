@@ -1,11 +1,14 @@
 import java.io.*;
 import java.util.Optional;
 
+import static java.util.Optional.of;
+
 public class CommandLineUI {
     public String GREETING_MESSAGE = "Welcome to the Rock Paper Scissors Game.\n\n";
     public String CONSOLE_MOVE_REQUEST = "Please enter Rock(1), Paper(2) or Scissors(3): \n";
     public String CONSOLE_MOVE_DISPLAY = "You have selected: %s \n";
     public String AI_MOVE_DISPLAY = "AI Player selected: %s \n";
+    public String RESULT_DISPLAY = "And the winner is: %s \n";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -39,6 +42,10 @@ public class CommandLineUI {
         writeStream.println(String.format(AI_MOVE_DISPLAY, aThrow));
     }
 
+    public void displayResult(Throw aThrow) {
+        writeStream.println(String.format(RESULT_DISPLAY, aThrow));
+    }
+
     private int readInput() {
         try {
             return Integer.parseInt(readStream.readLine());
@@ -62,7 +69,7 @@ public class CommandLineUI {
     private Optional<Throw> convertToThrow(int input) {
         for (Throw aThrow : Throw.values()) {
             if (aThrow.getIdentifier() == input) {
-                return Optional.of(aThrow);
+                return of(aThrow);
             }
         }
         return Optional.empty();
