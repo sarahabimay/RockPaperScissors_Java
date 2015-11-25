@@ -4,6 +4,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI implements UserInterface {
+    public String GAME_OVER = "Game Over! \n";
     public String ANNOUNCE_DRAW = "The game is a draw!";
     public String WINNING_RESULT = "And the winner is: %s \n";
     public String AI_MOVE = "AI player has thrown: %s \n";
@@ -29,6 +30,7 @@ public class CommandLineUI implements UserInterface {
     }
 
     public void displayResult(Optional<Throw> result) {
+        announceGameOver();
         if (result.isPresent()) {
             announceWin(result);
         } else {
@@ -36,10 +38,16 @@ public class CommandLineUI implements UserInterface {
         }
     }
 
+    private void announceGameOver() {
+        writeStream.println(GAME_OVER);
+    }
+
     public Throw requestConsoleMove() {
-        Throw consoleThrow = getMoveFromConsole();
-        displayConsoleMove(consoleThrow);
-        return consoleThrow;
+        return getMoveFromConsole();
+    }
+
+    public void displayConsoleMove(Throw consoleThrow) {
+        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
     }
 
     public boolean requestReplay() {
@@ -49,10 +57,6 @@ public class CommandLineUI implements UserInterface {
 
     public boolean isValidThrow(Optional<Throw> consoleMove) {
         return consoleMove.isPresent();
-    }
-
-    public void displayConsoleMove(Throw consoleThrow) {
-        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
     }
 
     private Throw getMoveFromConsole() {
@@ -114,7 +118,6 @@ public class CommandLineUI implements UserInterface {
         }
         return 0;
     }
-
 
     private void announceDraw() {
         displayMessageToConsole(ANNOUNCE_DRAW);
