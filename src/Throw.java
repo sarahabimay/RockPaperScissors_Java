@@ -4,7 +4,6 @@ public enum Throw {
     PAPER(2),
     SCISSORS(3);
 
-
     private int identifier;
 
     Throw(int identifier) {
