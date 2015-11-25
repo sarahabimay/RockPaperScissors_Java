@@ -13,4 +13,8 @@ public enum Throw {
     public int getIdentifier() {
         return identifier;
     }
+
+    public boolean equals(int moveChoice){
+        return identifier == moveChoice;
+    }
 }
