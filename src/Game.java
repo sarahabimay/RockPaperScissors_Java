@@ -15,15 +15,22 @@ public class Game {
     }
 
     public void obtainConsoleMoveAndDisplay() {
-        Throw consoleThrow = this.userInterface.requestConsoleMove();
-        this.players.add(new ConsolePlayer(consoleThrow));
+        ConsolePlayer consolePlayer = new ConsolePlayer(userInterface);
+        consolePlayer.generateThrow();
+        this.players.add(consolePlayer);
     }
 
     public List<Player> getPlayers() {
         return this.players;
     }
 
-    public void createAIPlayer() {
-        this.players.add(new AIPlayer());
+    public Player createAIPlayer() {
+        AIPlayer aiPlayer = new AIPlayer();
+        this.players.add(aiPlayer);
+        return aiPlayer;
+    }
+
+    public Throw generateAIMove(Player aiPlayer) {
+        return aiPlayer.generateThrow();
     }
 }

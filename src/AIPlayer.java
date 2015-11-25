@@ -7,6 +7,7 @@ public class AIPlayer implements Player {
     private Throw aThrow;
 
     public Throw getThrow() {
+        aThrow = generateThrow();
         return aThrow;
     }
 

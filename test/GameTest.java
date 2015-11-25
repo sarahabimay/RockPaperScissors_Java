@@ -2,8 +2,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.Arrays;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -53,5 +55,14 @@ public class GameTest {
         game.obtainConsoleMoveAndDisplay();
         game.createAIPlayer();
         assertEquals(2, game.getPlayers().size());
+    }
+
+    @Test
+    public void generateAnAIMove() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli);
+        game.obtainConsoleMoveAndDisplay();
+        assertThat(game.generateAIMove(game.createAIPlayer()), isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));
     }
 }
