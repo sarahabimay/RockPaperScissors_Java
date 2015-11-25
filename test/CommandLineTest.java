@@ -30,15 +30,7 @@ public class CommandLineTest implements UserInterface{
     public void humanTurnIsInvalid() {
         InputStream inputStream = new ByteArrayInputStream("99\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(false, cli.isValidThrow(99));
-    }
-
-    @Test
-    public void requestInvalidHumanInput() {
-        InputStream inputStream = new ByteArrayInputStream("99\n".getBytes());
-        cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(Optional.empty(), cli.requestConsoleTurn());
-        assertThat(output.toString(), containsString("Invalid choice. \n"));
+        assertEquals(false, cli.isValidThrow(Optional.empty()));
     }
 
     @Test
@@ -46,7 +38,7 @@ public class CommandLineTest implements UserInterface{
         byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == Paper
         InputStream inputStream = new ByteArrayInputStream(buf);
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(Throw.PAPER, cli.requestConsoleTurn().get());
+        assertEquals(Throw.PAPER, cli.requestConsoleTurn());
         assertThat(output.toString(), containsString("Invalid choice. \n"));
     }
 
@@ -54,23 +46,16 @@ public class CommandLineTest implements UserInterface{
     public void displayReplayChoices() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(2, cli.requestReplay());
+        assertEquals(true, cli.requestReplay());
         assertThat(output.toString(), containsString("Do you want to play again? Yes(1) or No(2): \n"));
     }
 
     @Test
-    public void replayChoiceIsInvalid() {
-        InputStream inputStream = new ByteArrayInputStream("99\n".getBytes());
-        cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(99, cli.requestReplay());
-        assertThat(output.toString(), containsString("Invalid selection: \n"));
-    }
-    @Test
-    public void requestReplayChoiceTillInvalid() {
-        byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == No
+    public void invalidThenValidReplayChoice(){
+        byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == Quit
         InputStream inputStream = new ByteArrayInputStream(buf);
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(2, cli.requestReplay());
+        assertEquals(true, cli.requestReplay());
         assertThat(output.toString(), containsString("Invalid selection: \n"));
     }
 }

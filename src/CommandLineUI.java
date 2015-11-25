@@ -12,46 +12,51 @@ public class CommandLineUI {
         this.writeStream = printStream;
     }
 
-    public Optional<Throw> requestConsoleTurn() {
-        int INVALID_MOVE = 9;
-        int consoleMove = INVALID_MOVE;
+    public Throw requestConsoleTurn() {
         Optional<Throw> consoleThrow = Optional.empty();
-        while (!isValidThrow(consoleMove)) {
+        while (!isValidThrow(consoleThrow)) {
             writeStream.println("Please select Rock(1), Paper(2), or Scissors(3): \n");
-            consoleMove = readLine();
-            writeStream.println(String.format("Your move was: %s", consoleMove));
-            if (!isValidThrow(consoleMove)) {
+            consoleThrow = convertToThrow(readLine());
+            if (!isValidThrow(consoleThrow)) {
                 writeStream.println("Invalid choice. \n");
             }
-            consoleThrow = convertToThrow(consoleMove);
         }
-        return consoleThrow;
+        writeStream.println(String.format("Your move was: %s", consoleThrow.get()));
+        return consoleThrow.get();
     }
 
-    public boolean isValidThrow(int consoleMove) {
-        return !convertToThrow(consoleMove).equals(Optional.empty());
+    public boolean isValidThrow(Optional<Throw> consoleMove) {
+        return consoleMove.isPresent();
     }
 
-    public int requestReplay() {
-        int INVALID_CHOICE = 9;
-        int replayChoice = INVALID_CHOICE;
-        while (!isValidReplayChoice(replayChoice )) {
+    public boolean requestReplay() {
+        Optional<ReplayOption> replayOption = Optional.empty();
+        while (!isValidReplayChoice(replayOption)) {
             writeStream.println("Do you want to play again? Yes(1) or No(2): \n");
-            replayChoice = readLine();
-            if (!isValidReplayChoice(replayChoice)) {
+            replayOption = convertToReplayOption(readLine());
+            if (!isValidReplayChoice(replayOption)) {
                 writeStream.println("Invalid selection: \n");
             }
         }
-        return replayChoice;
+        return replayOption.isPresent();
     }
 
-    private boolean isValidReplayChoice(int replayChoice) {
-        return replayChoice == 1 || replayChoice == 2;
+    private Optional<ReplayOption> convertToReplayOption(int replayChoice) {
+        for (ReplayOption option : ReplayOption.values()) {
+            if (option.equalsChoice(replayChoice)) {
+                return of(option);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private boolean isValidReplayChoice(Optional<ReplayOption> replayOption) {
+        return replayOption.isPresent();
     }
 
     private Optional<Throw> convertToThrow(int consoleMove) {
         for (Throw aThrow : Throw.values()) {
-            if (aThrow.equals(consoleMove)) {
+            if (aThrow.equalsChoice(consoleMove)) {
                 return of(aThrow);
             }
         }
@@ -68,4 +73,18 @@ public class CommandLineUI {
         return 0;
     }
 
+    private enum ReplayOption {
+        REPLAY(1),
+        QUIT(2);
+
+        private int choiceOption;
+
+        ReplayOption(int choiceOption) {
+            this.choiceOption = choiceOption;
+        }
+
+        public boolean equalsChoice(int choice){
+            return choiceOption == choice;
+        }
+    }
 }
