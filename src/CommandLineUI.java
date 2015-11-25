@@ -4,6 +4,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI {
+    public String AI_MOVE = "AI player has thrown: %s \n";
     public String CONSOLE_MOVE = "You have thrown: %s \n";
     public String INVALID_CHOICE = "Invalid selection. \n";
     public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
@@ -96,10 +97,9 @@ public class CommandLineUI {
         return 0;
     }
 
-    public void displayConsoleMove() {
-
+    public void displayAIMove(Throw rock) {
+        writeStream.println(String.format(AI_MOVE, rock));
     }
-
 
     private enum ReplayOption {
         REPLAY(1),
