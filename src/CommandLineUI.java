@@ -48,14 +48,13 @@ public class CommandLineUI {
         writeStream.println(String.format(RESULT_DISPLAY, aThrow));
     }
 
-    public int requestReplay() {
-        writeStream.println(REPLAY_REQUEST);
-        int choice = readInput();
+    public ReplayOption requestReplay() {
+        Optional<ReplayOption> choice = Optional.empty();
         while (!validReplayChoice(choice)) {
             writeStream.println(REPLAY_REQUEST);
-            choice = readInput();
+            choice = convertToReplayOption(readInput());
         }
-        return choice;
+        return choice.get();
     }
 
     public void play() {
@@ -72,12 +71,9 @@ public class CommandLineUI {
         }
     }
 
-    private boolean validReplayChoice(int choice) {
-        return choice == 1 || choice == 2;
-    }
 
-    private boolean isPlayAgain(int replayChoice) {
-        return replayChoice == 1;
+    private boolean isPlayAgain(ReplayOption replayChoice) {
+        return replayChoice == ReplayOption.REPLAY;
     }
 
     private Throw playAgainstAI(Throw aConsoleThrow, Throw dummyAIThrow) {
@@ -100,9 +96,9 @@ public class CommandLineUI {
     }
 
     private boolean isValid(Optional<Throw> consoleThrow) {
+        if (!consoleThrow.isPresent()) return false;
         for (Throw athrow : Throw.values()) {
-            boolean ispresent = consoleThrow.isPresent();
-            if (consoleThrow.isPresent() && athrow.equals(consoleThrow.get())) {
+            if (athrow.equals(consoleThrow.get())) {
                 return true;
             }
         }
@@ -118,4 +114,37 @@ public class CommandLineUI {
         return Optional.empty();
     }
 
+    private boolean validReplayChoice(Optional<ReplayOption> choice) {
+        if (!choice.isPresent()) return false;
+        for (ReplayOption option : ReplayOption.values()) {
+            if (option.equals(choice.get())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Optional<ReplayOption> convertToReplayOption(int choice) {
+        for (ReplayOption option : ReplayOption.values()) {
+            if (option.optionNumber() == choice) {
+                return of(option);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private enum ReplayOption {
+        QUIT(1),
+        REPLAY(2);
+
+        private int optionNumber;
+
+        ReplayOption(int choiceNumber) {
+            this.optionNumber = choiceNumber;
+        }
+
+        public int optionNumber() {
+            return optionNumber;
+        }
+    }
 }
