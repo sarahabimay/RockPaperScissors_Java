@@ -5,6 +5,7 @@ public class CommandLineUI {
     public String GREETING_MESSAGE = "Welcome to the Rock Paper Scissors Game.\n\n";
     public String CONSOLE_MOVE_REQUEST = "Please enter Rock(1), Paper(2) or Scissors(3): \n";
     public String CONSOLE_MOVE_DISPLAY = "You have selected: %s \n";
+    public String AI_MOVE_DISPLAY = "AI Player selected: %s \n";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -32,6 +33,10 @@ public class CommandLineUI {
 
     public void displayConsoleMove(Optional<Throw> throwType) {
         writeStream.println(String.format(CONSOLE_MOVE_DISPLAY, throwType.get()));
+    }
+
+    public void displayAIMove(Throw aThrow) {
+        writeStream.println(String.format(AI_MOVE_DISPLAY, aThrow));
     }
 
     private int readInput() {
@@ -62,4 +67,5 @@ public class CommandLineUI {
         }
         return Optional.empty();
     }
+
 }

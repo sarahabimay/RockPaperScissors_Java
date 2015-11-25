@@ -56,4 +56,11 @@ public class CommandLineUITest {
         String expected = "Please enter Rock(1), Paper(2) or Scissors(3): \n\nYou have selected: SCISSORS \n\n";
         assertThat(output.toString(), is(expected));
     }
+
+    @Test
+    public void displayAIChoice() {
+        cli.displayAIMove(Throw.ROCK);
+        String expected = String.format(cli.AI_MOVE_DISPLAY, Throw.ROCK);
+        assertThat(output.toString(), containsString(expected));
+    }
 }
