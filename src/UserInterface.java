@@ -1,13 +1,15 @@
+import java.util.Optional;
+
 public interface UserInterface {
     void displayGreeting();
 
-    Throw requestConsoleMove();
+    void displayResult(Optional<Throw> result);
 
-    void displayResult();
+    Throw requestConsoleMove();
 
     void displayAIMove(Throw symbol);
 
-    void play();
+//    void play();
 
     void displayConsoleMove(Throw symbol);
 }

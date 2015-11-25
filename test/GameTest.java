@@ -1,14 +1,27 @@
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.io.*;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertThat;
 
 public class GameTest {
+    private OutputStream output;
+    private PrintStream printStream;
+
+    @Before
+    public void setUp() {
+        output = new ByteArrayOutputStream();
+        printStream = new PrintStream(output);
+    }
+
     @Test
-    public void playTheGameAgainstTwoPlayers() {
-        ConsolePlayer consolePlayer = new ConsolePlayer(Throw.ROCK);
-        FakeAIPlayer aiPlayer = new FakeAIPlayer();
-        aiPlayer.nextThrow(Throw.PAPER);
-        Game game = new Game(new Rules());
-        assertEquals(Throw.PAPER, game.playGame(consolePlayer, aiPlayer));
+    public void askCommandLineToDisplayGreeting() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli);
+        game.askUIToDisplayGreeting();
+        assertThat(output.toString(), containsString(cli.GREETING_PROMPT));
     }
 }

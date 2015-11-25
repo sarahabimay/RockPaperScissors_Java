@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class CommandLineTest implements UserInterface {
+public class CommandLineTest{
     private OutputStream output;
     private PrintStream printStream;
     private CommandLineUI cli;
@@ -23,7 +23,7 @@ public class CommandLineTest implements UserInterface {
     public void requestHumanTurn() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(Throw.ROCK, cli.requestConsoleTurn());
+        assertEquals(Throw.ROCK, cli.requestConsoleMove());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class CommandLineTest implements UserInterface {
         byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == Paper
         InputStream inputStream = new ByteArrayInputStream(buf);
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(Throw.PAPER, cli.requestConsoleTurn());
+        assertEquals(Throw.PAPER, cli.requestConsoleMove());
         assertThat(output.toString(), containsString(cli.INVALID_CHOICE));
     }
 
@@ -71,7 +71,7 @@ public class CommandLineTest implements UserInterface {
     public void requestDisplayConsoleMove() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        cli.requestConsoleTurn();
+        cli.requestConsoleMove();
         String expected = String.format(cli.CONSOLE_MOVE, Throw.PAPER);
         assertThat(output.toString(), containsString(expected));
     }
