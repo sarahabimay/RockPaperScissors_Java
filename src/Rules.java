@@ -1,18 +1,20 @@
+import java.util.Optional;
+
 public class Rules {
-    public Throw decideWinner(Throw symbol1, Throw symbol2) {
+    public Optional<Throw> decideWinner(Throw symbol1, Throw symbol2) {
         if (symbolsAreTheSame(symbol1, symbol2)) {
-            return symbol1;
+            return Optional.empty();
         }
         if (isPaper(symbol1, symbol2) && isScissor(symbol1, symbol2)) {
-            return Throw.SCISSORS;
+            return Optional.of(Throw.SCISSORS);
         }
         if (isPaper(symbol1, symbol2) && isRock(symbol1, symbol2)) {
-            return Throw.PAPER;
+            return Optional.of(Throw.PAPER);
         }
         if (isScissor(symbol1, symbol2) && isRock(symbol1, symbol2)) {
-            return Throw.ROCK;
+            return Optional.of(Throw.ROCK);
         }
-        return null;
+        return Optional.empty();
     }
 
     private boolean isRock(Throw symbol1, Throw symbol2) {

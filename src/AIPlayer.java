@@ -3,6 +3,10 @@ import java.util.Random;
 public class AIPlayer implements Player {
     private Throw aThrow;
 
+    public Throw getThrow() {
+        return aThrow;
+    }
+
     public Throw generateThrow() {
         this.aThrow = getRandomSymbolInRange(Throw.values().length);
         return aThrow;

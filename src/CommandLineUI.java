@@ -74,7 +74,7 @@ public class CommandLineUI {
 
     private Throw playAgainstAI(Throw aConsoleThrow, Throw dummyAIThrow) {
         Rules rules = new Rules();
-        return rules.decideWinner(aConsoleThrow, dummyAIThrow);
+        return rules.decideWinner(aConsoleThrow, dummyAIThrow).get();
     }
 
     private Throw dummySCISSORSAsAIThrow() {
