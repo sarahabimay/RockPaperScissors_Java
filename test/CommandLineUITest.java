@@ -24,7 +24,6 @@ public class CommandLineUITest {
 
     @Test
     public void displayGreeting() {
-        CommandLineUI cli = new CommandLineUI(printStream);
         cli.displayGreeting();
         String expected = cli.GREETING_MESSAGE;
         assertThat(output.toString(), containsString(expected));
@@ -72,7 +71,6 @@ public class CommandLineUITest {
         String expected = String.format(cli.RESULT_DISPLAY, "ROCK");
         assertThat(output.toString(), containsString(expected));
     }
-
 
     @Test
     public void displayReplayOption() {

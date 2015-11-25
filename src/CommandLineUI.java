@@ -14,10 +14,6 @@ public class CommandLineUI {
     private BufferedReader readStream;
 
 
-    public CommandLineUI(PrintStream printStream) {
-        this.writeStream = printStream;
-    }
-
     public CommandLineUI(InputStream inputStream, PrintStream printStream) {
         this.readStream = new BufferedReader(new InputStreamReader(inputStream));
         this.writeStream = printStream;
