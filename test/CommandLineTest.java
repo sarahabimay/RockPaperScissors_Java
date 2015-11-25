@@ -84,4 +84,14 @@ public class CommandLineTest implements UserInterface {
         String expected = String.format(cli.AI_MOVE, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
+
+    @Test
+    public void requestDisplayResultWithWinner() {
+        InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
+        cli.displayResult(Throw.ROCK);
+        String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
+        assertThat(output.toString(), containsString(expected));
+
+    }
 }
