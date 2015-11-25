@@ -13,27 +13,27 @@ import static org.junit.Assert.assertThat;
 public class GameTest {
     private OutputStream output;
     private PrintStream printStream;
+    private InputStream inputStream;
+    private CommandLineUI cli;
+    private Game game;
 
     @Before
     public void setUp() {
         output = new ByteArrayOutputStream();
         printStream = new PrintStream(output);
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
+        game = new Game(cli, new Rules());
     }
 
     @Test
     public void askCommandLineToDisplayGreeting() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         game.askUIToDisplayGreeting();
         assertThat(output.toString(), containsString(cli.GREETING_PROMPT));
     }
 
     @Test
     public void getAndDisplayConsoleMoveToCommandLine() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         game.displayConsoleMove(game.createConsolePlayer().generateThrow());
         String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
@@ -41,18 +41,12 @@ public class GameTest {
 
     @Test
     public void checkValidAIMoveIsGenerate() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         assertThat(game.createAIPlayer().generateThrow(),
                 isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));
     }
 
     @Test
     public void displayAIMoveToCommandLine() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
         Throw aiMove = aiPlayer.generateThrow();
         game.displayAIMove(aiMove);
@@ -62,9 +56,6 @@ public class GameTest {
 
     @Test
     public void confirmTwoPlayersAddedToGame() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         game.createConsolePlayer();
         game.createAIPlayer();
         assertEquals(2, game.getPlayers().size());
@@ -72,9 +63,6 @@ public class GameTest {
 
     @Test
     public void playTheGameAndDisplayWinningResult() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
         Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
@@ -85,9 +73,6 @@ public class GameTest {
 
     @Test
     public void playTheGameAndDisplayDrawResult() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.ROCK);
         Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
@@ -97,9 +82,6 @@ public class GameTest {
 
     @Test
     public void gameIntegrationTest() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
         game.startGame();
         assertThat(output.toString(), containsString(cli.GAME_OVER));
     }
