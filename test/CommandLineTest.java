@@ -89,9 +89,17 @@ public class CommandLineTest implements UserInterface {
     public void requestDisplayResultWithWinner() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        cli.displayResult(Throw.ROCK);
+        cli.displayResult(Optional.of(Throw.ROCK));
         String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
 
+    }
+
+    @Test
+    public void requestDisplayResultWithDraw() {
+        InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
+        cli = new CommandLineUI(inputStream, printStream);
+        cli.displayResult(Optional.empty());
+        assertThat(output.toString(), containsString(cli.ANNOUNCE_DRAW));
     }
 }

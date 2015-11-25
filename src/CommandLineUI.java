@@ -4,6 +4,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI {
+    public String ANNOUNCE_DRAW = "The game is a draw!";
     public String WINNING_RESULT = "And the winner is: %s \n";
     public String AI_MOVE = "AI player has thrown: %s \n";
     public String CONSOLE_MOVE = "You have thrown: %s \n";
@@ -102,9 +103,12 @@ public class CommandLineUI {
         writeStream.println(String.format(AI_MOVE, rock));
     }
 
-    public void displayResult(Throw result) {
-        if (Optional.of(result).isPresent()){
+    public void displayResult(Optional<Throw> result) {
+        if (result.isPresent()){
             writeStream.println(String.format(WINNING_RESULT, result));
+        }
+        else{
+            writeStream.println(ANNOUNCE_DRAW);
         }
     }
 
