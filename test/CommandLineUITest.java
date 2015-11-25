@@ -72,4 +72,14 @@ public class CommandLineUITest {
         String expected = String.format(cli.RESULT_DISPLAY, "ROCK");
         assertThat(output.toString(), containsString(expected));
     }
+
+    @Test
+    public void displayReplayOption() {
+        byte[] buf = "1\n2\n".getBytes();
+        InputStream inputStream = new ByteArrayInputStream(buf);
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        cli.requestReplay();
+        String expected = cli.REPLAY_REQUEST;
+        assertThat(output.toString(), containsString(expected));
+    }
 }

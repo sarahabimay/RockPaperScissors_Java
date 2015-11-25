@@ -9,6 +9,7 @@ public class CommandLineUI {
     public String CONSOLE_MOVE_DISPLAY = "You have selected: %s \n";
     public String AI_MOVE_DISPLAY = "AI Player selected: %s \n";
     public String RESULT_DISPLAY = "And the winner is: %s \n";
+    public String REPLAY_REQUEST = "Do you want to play again? Yes(1) or No(2): \n";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -44,6 +45,10 @@ public class CommandLineUI {
 
     public void displayResult(Throw aThrow) {
         writeStream.println(String.format(RESULT_DISPLAY, aThrow));
+    }
+
+    public void requestReplay() {
+        writeStream.println(REPLAY_REQUEST);
     }
 
     private int readInput() {
