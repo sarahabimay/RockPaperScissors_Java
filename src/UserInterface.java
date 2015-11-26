@@ -12,4 +12,6 @@ public interface UserInterface {
 //    void play();
 
     void displayConsoleMove(Throw symbol);
+
+    boolean requestReplay();
 }

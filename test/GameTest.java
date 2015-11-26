@@ -81,6 +81,22 @@ public class GameTest {
     }
 
     @Test
+    public void requestToPlayAgain() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        assertEquals(true, game.playAgain());
+    }
+
+    @Test
+    public void requestToQuit() {
+        InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        assertEquals(false, game.playAgain());
+    }
+
+    @Test
     public void gameIntegrationTest() {
         game.startGame();
         assertThat(output.toString(), containsString(cli.GAME_OVER));

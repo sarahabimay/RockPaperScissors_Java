@@ -57,7 +57,12 @@ public class Game {
         userInterface.displayAIMove(aThrow);
     }
 
+    boolean playAgain() {
+        return userInterface.requestReplay();
+    }
+
     private Optional<Throw> playGame() {
         return throwPlayerMoves(players.get(0), players.get(1));
     }
+
 }

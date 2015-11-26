@@ -52,7 +52,7 @@ public class CommandLineUI implements UserInterface {
 
     public boolean requestReplay() {
         Optional<ReplayOption> replayOption = getReplayOption();
-        return replayOption.isPresent();
+        return replayOption.get().equals(ReplayOption.REPLAY);
     }
 
     public boolean isValidThrow(Optional<Throw> consoleMove) {
