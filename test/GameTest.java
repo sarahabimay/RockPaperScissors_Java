@@ -24,7 +24,7 @@ public class GameTest {
     public void askCommandLineToDisplayGreeting() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli);
+        Game game = new Game(cli, new Rules());
         game.askUIToDisplayGreeting();
         assertThat(output.toString(), containsString(cli.GREETING_PROMPT));
     }
@@ -33,7 +33,7 @@ public class GameTest {
     public void askUIToGetAndDisplayConsoleUserPrompt() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli);
+        Game game = new Game(cli, new Rules());
         game.obtainConsoleMoveAndDisplay();
         String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
@@ -43,7 +43,7 @@ public class GameTest {
     public void checkConsolePlayerWasCreated() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli);
+        Game game = new Game(cli, new Rules());
         game.obtainConsoleMoveAndDisplay();
         assertEquals(1, game.getPlayers().size());
     }
@@ -52,7 +52,7 @@ public class GameTest {
     public void createAIPlayer() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli);
+        Game game = new Game(cli, new Rules());
         game.obtainConsoleMoveAndDisplay();
         game.createAIPlayer();
         assertEquals(2, game.getPlayers().size());
@@ -62,7 +62,7 @@ public class GameTest {
     public void generateAnAIMove() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli);
+        Game game = new Game(cli, new Rules());
         game.obtainConsoleMoveAndDisplay();
         assertThat(game.generateAIMove(game.createAIPlayer()),
                 isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));

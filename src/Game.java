@@ -7,11 +7,6 @@ public class Game {
     private UserInterface userInterface;
     private List<Player> players;
 
-    public Game(UserInterface userInterface) {
-        this.userInterface = userInterface;
-        this.players = new ArrayList<>();
-    }
-
     public Game(UserInterface userInterface, Rules rules) {
         this.userInterface = userInterface;
         this.players = new ArrayList<>();
