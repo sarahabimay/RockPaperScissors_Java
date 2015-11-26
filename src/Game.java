@@ -13,18 +13,25 @@ public class Game {
         this.rules = rules;
     }
 
+    public void startGame() {
+        askUIToDisplayGreeting();
+        displayConsoleMove(createConsolePlayer().generateThrow());
+        displayAIMove(createAIPlayer().generateThrow());
+        askUIToDisplayResult(playGame());
+    }
+
+    private Optional<Throw> playGame() {
+        return throwPlayerMoves(players.get(0), players.get(1));
+    }
+
     public void askUIToDisplayGreeting() {
         this.userInterface.displayGreeting();
     }
 
-    public void obtainConsoleMoveAndDisplay() {
+    public Player createConsolePlayer() {
         ConsolePlayer consolePlayer = new ConsolePlayer(userInterface);
-        consolePlayer.generateThrow();
         this.players.add(consolePlayer);
-    }
-
-    public List<Player> getPlayers() {
-        return this.players;
+        return consolePlayer;
     }
 
     public Player createAIPlayer() {
@@ -33,15 +40,23 @@ public class Game {
         return aiPlayer;
     }
 
-    public Throw generateAIMove(Player aiPlayer) {
-        return aiPlayer.generateThrow();
+    public List<Player> getPlayers() {
+        return this.players;
     }
 
-    public Optional<Throw> throwPlayerMoves(Throw aThrow1, Throw aThrow2) {
-        return rules.decideWinner(aThrow1, aThrow2);
+    public Optional<Throw> throwPlayerMoves(Player player1, Player player2) {
+        return rules.decideWinner(player1.getThrow(), player2.getThrow());
     }
 
     public void askUIToDisplayResult(Optional<Throw> result) {
         userInterface.displayResult(result);
+    }
+
+    void displayConsoleMove(Throw aThrow) {
+        userInterface.displayConsoleMove(aThrow);
+    }
+
+    void displayAIMove(Throw aThrow) {
+        userInterface.displayAIMove(aThrow);
     }
 }

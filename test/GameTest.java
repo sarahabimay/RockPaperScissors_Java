@@ -30,42 +30,44 @@ public class GameTest {
     }
 
     @Test
-    public void askUIToGetAndDisplayConsoleUserPrompt() {
+    public void getAndDisplayConsoleMoveToCommandLine() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         Game game = new Game(cli, new Rules());
-        game.obtainConsoleMoveAndDisplay();
+        game.displayConsoleMove(game.createConsolePlayer().generateThrow());
         String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
 
     @Test
-    public void checkConsolePlayerWasCreated() {
+    public void checkValidAIMoveIsGenerate() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         Game game = new Game(cli, new Rules());
-        game.obtainConsoleMoveAndDisplay();
-        assertEquals(1, game.getPlayers().size());
+        assertThat(game.createAIPlayer().generateThrow(),
+                isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));
     }
 
     @Test
-    public void createAIPlayer() {
+    public void displayAIMoveToCommandLine() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);
         Game game = new Game(cli, new Rules());
-        game.obtainConsoleMoveAndDisplay();
+        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
+        Throw aiMove = aiPlayer.generateThrow();
+        game.displayAIMove(aiMove);
+        String expected = String.format(cli.AI_MOVE, Throw.PAPER);
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
+    public void confirmTwoPlayersAddedToGame() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        game.createConsolePlayer();
         game.createAIPlayer();
         assertEquals(2, game.getPlayers().size());
-    }
-
-    @Test
-    public void generateAnAIMove() {
-        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
-        Game game = new Game(cli, new Rules());
-        game.obtainConsoleMoveAndDisplay();
-        assertThat(game.generateAIMove(game.createAIPlayer()),
-                isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));
     }
 
     @Test
@@ -75,7 +77,7 @@ public class GameTest {
         Game game = new Game(cli, new Rules());
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
-        Optional<Throw> result = game.throwPlayerMoves(consolePlayer.getThrow(), aiPlayer.getThrow());
+        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
         String expected = String.format(cli.WINNING_RESULT, Throw.PAPER);
         assertThat(output.toString(), containsString(expected));
@@ -88,9 +90,18 @@ public class GameTest {
         Game game = new Game(cli, new Rules());
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
         FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.ROCK);
-        Optional<Throw> result = game.throwPlayerMoves(consolePlayer.getThrow(), aiPlayer.getThrow());
+        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
         assertThat(output.toString(), containsString(cli.ANNOUNCE_DRAW));
+    }
+
+    @Test
+    public void gameIntegrationTest() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        game.startGame();
+        assertThat(output.toString(), containsString(cli.GAME_OVER));
     }
 
     private FakeAIPlayer generateFakeAIPlayerAndMove(Throw dummyMove) {
