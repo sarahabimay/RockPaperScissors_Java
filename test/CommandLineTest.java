@@ -46,13 +46,13 @@ public class CommandLineTest{
     public void displayReplayChoices() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        assertEquals(true, cli.requestReplay());
+        cli.requestReplay();
         assertThat(output.toString(), containsString(cli.REPLAY_OPTION));
     }
 
     @Test
-    public void invalidThenValidReplayChoice() {
-        byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == Quit
+    public void invalidThenReplayChosen() {
+        byte[] buf = "9\n1\n".getBytes();// 9 == invalid and 1 == Replay
         InputStream inputStream = new ByteArrayInputStream(buf);
         cli = new CommandLineUI(inputStream, printStream);
         assertEquals(true, cli.requestReplay());

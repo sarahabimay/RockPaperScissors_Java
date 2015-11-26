@@ -81,9 +81,52 @@ public class GameTest {
     }
 
     @Test
-    public void gameIntegrationTest() {
+    public void playTheGameAndyDrawResult() {
+//        ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
+//        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.SCISSORS);
+//        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
+//        game.askUIToDisplayResult(result);
         game.startGame();
-        assertThat(output.toString(), containsString(cli.GAME_OVER));
+        String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
+    public void requestToPlayAgain() {
+        InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        assertEquals(true, game.playAgain());
+    }
+
+    @Test
+    public void requestToQuit() {
+        InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
+        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        Game game = new Game(cli, new Rules());
+        assertEquals(false, game.playAgain());
+    }
+
+    @Test
+    public void invalidMoveValidMoveReplayQuitIntegration() {
+        int INVALID = 9;
+        int REPLAY = 1;
+        int QUIT = 2;
+        String buffer = String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
+                INVALID,
+                Throw.ROCK.getIdentifier(),
+                REPLAY,
+                Throw.SCISSORS.getIdentifier(),
+                INVALID,
+                QUIT);
+        byte[] buf = buffer.getBytes();// invalid, Rock, Replay, Scissors, Invalid, Quit
+        InputStream inputStream = new ByteArrayInputStream(buf);
+        CommandLineUI cli = new CommandLineUI(inputStream,printStream);
+        Game game = new Game(cli, new Rules());
+        game.startGame();
+        assertThat(output.toString(), containsString("REPLAY"));
+        assertThat(output.toString(), containsString("QUIT"));
+        assertThat(output.toString(), containsString(cli.INVALID_CHOICE));
     }
 
     private FakeAIPlayer generateFakeAIPlayerAndMove(Throw dummyMove) {

@@ -25,6 +25,14 @@ public class CommandLineUI implements UserInterface {
         displayMessageToConsole(GREETING_PROMPT);
     }
 
+    public Throw requestConsoleMove() {
+        return getMoveFromConsole();
+    }
+
+    public void displayConsoleMove(Throw consoleThrow) {
+        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
+    }
+
     public void displayAIMove(Throw rock) {
         displayMessageToConsole(String.format(AI_MOVE, rock));
     }
@@ -38,21 +46,9 @@ public class CommandLineUI implements UserInterface {
         }
     }
 
-    private void announceGameOver() {
-        writeStream.println(GAME_OVER);
-    }
-
-    public Throw requestConsoleMove() {
-        return getMoveFromConsole();
-    }
-
-    public void displayConsoleMove(Throw consoleThrow) {
-        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
-    }
-
     public boolean requestReplay() {
-        Optional<ReplayOption> replayOption = getReplayOption();
-        return replayOption.isPresent();
+        ReplayOption replayOption = getReplayOption();
+        return replayOption.equals(ReplayOption.REPLAY);
     }
 
     public boolean isValidThrow(Optional<Throw> consoleMove) {
@@ -71,10 +67,6 @@ public class CommandLineUI implements UserInterface {
         return consoleThrow.get();
     }
 
-    private void displayMessageToConsole(String throw_choice) {
-        writeStream.println(throw_choice);
-    }
-
     private Optional<Throw> convertToThrow(int consoleMove) {
         for (Throw aThrow : Throw.values()) {
             if (aThrow.equalsChoice(consoleMove)) {
@@ -84,7 +76,7 @@ public class CommandLineUI implements UserInterface {
         return Optional.empty();
     }
 
-    private Optional<ReplayOption> getReplayOption() {
+    private ReplayOption getReplayOption() {
         Optional<ReplayOption> replayOption = Optional.empty();
         while (!isValidReplayChoice(replayOption)) {
             displayMessageToConsole(REPLAY_OPTION);
@@ -92,8 +84,19 @@ public class CommandLineUI implements UserInterface {
             if (!isValidReplayChoice(replayOption)) {
                 displayMessageToConsole(INVALID_CHOICE);
             }
+            displayReplayChoice(replayOption);
         }
-        return replayOption;
+        return replayOption.get();
+    }
+
+    private void displayReplayChoice(Optional<ReplayOption> replayOption) {
+        String prompt;
+        if (replayOption.isPresent()) {
+            prompt = replayOption.get().toString();
+        } else {
+            prompt = INVALID_CHOICE;
+        }
+        writeStream.println(String.format("%s \n", prompt));
     }
 
     private boolean isValidReplayChoice(Optional<ReplayOption> replayOption) {
@@ -125,6 +128,14 @@ public class CommandLineUI implements UserInterface {
 
     private void announceWin(Optional<Throw> result) {
         displayMessageToConsole(String.format(WINNING_RESULT, result.get()));
+    }
+
+    private void announceGameOver() {
+        displayMessageToConsole(GAME_OVER);
+    }
+
+    private void displayMessageToConsole(String throw_choice) {
+        writeStream.println(throw_choice);
     }
 
     private enum ReplayOption {
