@@ -81,6 +81,17 @@ public class GameTest {
     }
 
     @Test
+    public void playTheGameAndyDrawResult() {
+//        ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
+//        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.SCISSORS);
+//        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
+//        game.askUIToDisplayResult(result);
+        game.startGame();
+        String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
+        assertThat(output.toString(), containsString(expected));
+    }
+
+    @Test
     public void requestToPlayAgain() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         CommandLineUI cli = new CommandLineUI(inputStream, printStream);

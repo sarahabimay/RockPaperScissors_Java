@@ -62,6 +62,7 @@ public class Game {
     }
 
     boolean playAgain() {
+        this.players = new ArrayList<>();
         return userInterface.requestReplay();
     }
 
