@@ -20,9 +20,6 @@ public class Game {
         askUIToDisplayResult(playGame());
     }
 
-    private Optional<Throw> playGame() {
-        return throwPlayerMoves(players.get(0), players.get(1));
-    }
 
     public void askUIToDisplayGreeting() {
         this.userInterface.displayGreeting();
@@ -58,5 +55,9 @@ public class Game {
 
     void displayAIMove(Throw aThrow) {
         userInterface.displayAIMove(aThrow);
+    }
+
+    private Optional<Throw> playGame() {
+        return throwPlayerMoves(players.get(0), players.get(1));
     }
 }
