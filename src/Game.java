@@ -14,10 +14,14 @@ public class Game {
     }
 
     public void startGame() {
-        askUIToDisplayGreeting();
-        displayConsoleMove(createConsolePlayer().generateThrow());
-        displayAIMove(createAIPlayer().generateThrow());
-        askUIToDisplayResult(playGame());
+        boolean replay = true;
+        while (replay) {
+            askUIToDisplayGreeting();
+            displayConsoleMove(createConsolePlayer().generateThrow());
+            displayAIMove(createAIPlayer().generateThrow());
+            askUIToDisplayResult(playGame());
+            replay = playAgain();
+        }
     }
 
 
@@ -57,7 +61,13 @@ public class Game {
         userInterface.displayAIMove(aThrow);
     }
 
+    boolean playAgain() {
+        this.players = new ArrayList<>();
+        return userInterface.requestReplay();
+    }
+
     private Optional<Throw> playGame() {
         return throwPlayerMoves(players.get(0), players.get(1));
     }
+
 }
