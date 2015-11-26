@@ -14,10 +14,14 @@ public class Game {
     }
 
     public void startGame() {
-        askUIToDisplayGreeting();
-        displayConsoleMove(createConsolePlayer().generateThrow());
-        displayAIMove(createAIPlayer().generateThrow());
-        askUIToDisplayResult(playGame());
+        boolean replay = true;
+        while (replay) {
+            askUIToDisplayGreeting();
+            displayConsoleMove(createConsolePlayer().generateThrow());
+            displayAIMove(createAIPlayer().generateThrow());
+            askUIToDisplayResult(playGame());
+            replay = playAgain();
+        }
     }
 
 
