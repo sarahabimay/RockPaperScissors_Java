@@ -14,36 +14,36 @@ public class RuleTest {
 
     @Test
     public void sameSymbolResultsInTie() {
-        assertEquals(Symbol.PAPER, rules.decideWinner(Symbol.PAPER, Symbol.PAPER));
+        assertEquals(Throw.PAPER, rules.decideWinner(Throw.PAPER, Throw.PAPER));
     }
 
     @Test
     public void rockVScissorRule() {
-        assertEquals(Symbol.ROCK, rules.decideWinner(Symbol.ROCK, Symbol.SCISSORS));
+        assertEquals(Throw.ROCK, rules.decideWinner(Throw.ROCK, Throw.SCISSORS));
     }
 
     @Test
     public void scissorVRockRule() {
-        assertEquals(Symbol.ROCK, rules.decideWinner(Symbol.SCISSORS, Symbol.ROCK));
+        assertEquals(Throw.ROCK, rules.decideWinner(Throw.SCISSORS, Throw.ROCK));
     }
 
     @Test
     public void rockVPaperRule() {
-        assertEquals(Symbol.PAPER, rules.decideWinner(Symbol.ROCK, Symbol.PAPER));
+        assertEquals(Throw.PAPER, rules.decideWinner(Throw.ROCK, Throw.PAPER));
     }
 
     @Test
     public void paperVRockRule() {
-        assertEquals(Symbol.PAPER, rules.decideWinner(Symbol.PAPER, Symbol.ROCK));
+        assertEquals(Throw.PAPER, rules.decideWinner(Throw.PAPER, Throw.ROCK));
     }
 
     @Test
     public void scissorVPaperRule() {
-        assertEquals(Symbol.SCISSORS, rules.decideWinner(Symbol.SCISSORS, Symbol.PAPER));
+        assertEquals(Throw.SCISSORS, rules.decideWinner(Throw.SCISSORS, Throw.PAPER));
     }
 
     @Test
     public void paperVScissorRule() {
-        assertEquals(Symbol.SCISSORS, rules.decideWinner(Symbol.PAPER, Symbol.SCISSORS));
+        assertEquals(Throw.SCISSORS, rules.decideWinner(Throw.PAPER, Throw.SCISSORS));
     }
 }

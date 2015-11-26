@@ -1,13 +1,13 @@
 public interface UserInterface {
     void displayGreeting();
 
-    Symbol requestConsoleMove();
+    Throw requestConsoleMove();
 
     void displayResult();
 
-    void displayAIMove(Symbol symbol);
+    void displayAIMove(Throw symbol);
 
     void play();
 
-    void displayConsoleMove(Symbol symbol);
+    void displayConsoleMove(Throw symbol);
 }
