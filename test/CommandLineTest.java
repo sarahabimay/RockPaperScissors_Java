@@ -71,7 +71,7 @@ public class CommandLineTest{
     public void requestDisplayConsoleMove() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLineUI(inputStream, printStream);
-        cli.requestConsoleMove();
+        cli.displayConsoleMove(cli.requestConsoleMove());
         String expected = String.format(cli.CONSOLE_MOVE, Throw.PAPER);
         assertThat(output.toString(), containsString(expected));
     }
