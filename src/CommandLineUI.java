@@ -4,15 +4,16 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLineUI {
-    public String GREETING_MESSAGE = "Welcome to the Rock Paper Scissors Game.\n\n";
-    public String CONSOLE_MOVE_REQUEST = "Please enter Rock(1), Paper(2) or Scissors(3): \n";
-    public String CONSOLE_MOVE_DISPLAY = "You have selected: %s \n";
-    public String AI_MOVE_DISPLAY = "AI Player selected: %s \n";
-    public String RESULT_DISPLAY = "And the winner is: %s \n";
-    public String REPLAY_REQUEST = "Do you want to play again? Yes(1) or No(2): \n";
+    public String ANNOUNCE_DRAW = "The game is a draw!";
+    public String WINNING_RESULT = "And the winner is: %s \n";
+    public String AI_MOVE = "AI player has thrown: %s \n";
+    public String CONSOLE_MOVE = "You have thrown: %s \n";
+    public String INVALID_CHOICE = "Invalid selection. \n";
+    public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
+    public String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
+    public String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
     private PrintStream writeStream;
     private BufferedReader readStream;
-
 
     public CommandLineUI(InputStream inputStream, PrintStream printStream) {
         this.readStream = new BufferedReader(new InputStreamReader(inputStream));
@@ -20,68 +21,91 @@ public class CommandLineUI {
     }
 
     public void displayGreeting() {
-        writeStream.println(GREETING_MESSAGE);
+        displayMessageToConsole(GREETING_PROMPT);
     }
 
-    public Throw requestConsoleMove() {
+    public void displayAIMove(Throw rock) {
+        displayMessageToConsole(String.format(AI_MOVE, rock));
+    }
+
+    public void displayResult(Optional<Throw> result) {
+        if (result.isPresent()){
+            announceWin(result);
+        }
+        else{
+            announceDraw();
+        }
+    }
+    public Throw requestConsoleTurn() {
+        Throw consoleThrow = getMoveFromConsole();
+        displayConsoleMove(consoleThrow);
+        return consoleThrow;
+    }
+
+    public boolean requestReplay() {
+        Optional<ReplayOption> replayOption = getReplayOption();
+        return replayOption.isPresent();
+    }
+
+    public boolean isValidThrow(Optional<Throw> consoleMove) {
+        return consoleMove.isPresent();
+    }
+
+    private void displayConsoleMove(Throw consoleThrow) {
+        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
+    }
+
+    private Throw getMoveFromConsole() {
         Optional<Throw> consoleThrow = Optional.empty();
-        while (!isValid(consoleThrow)) {
-            writeStream.println(CONSOLE_MOVE_REQUEST);
-            consoleThrow = convertToThrow(readInput());
+        while (!isValidThrow(consoleThrow)) {
+            displayMessageToConsole(THROW_CHOICE);
+            consoleThrow = convertToThrow(readLine());
+            if (!isValidThrow(consoleThrow)) {
+                displayMessageToConsole(INVALID_CHOICE);
+            }
         }
         return consoleThrow.get();
     }
 
-    public void displayConsoleMove(Throw throwType) {
-        writeStream.println(String.format(CONSOLE_MOVE_DISPLAY, throwType));
+    private void displayMessageToConsole(String throw_choice) {
+        writeStream.println(throw_choice);
     }
 
-    public void displayAIMove(Throw aThrow) {
-        writeStream.println(String.format(AI_MOVE_DISPLAY, aThrow));
-    }
-
-    public void displayResult(Throw aThrow) {
-        writeStream.println(String.format(RESULT_DISPLAY, aThrow));
-    }
-
-    public ReplayOption requestReplay() {
-        Optional<ReplayOption> choice = Optional.empty();
-        while (!validReplayChoice(choice)) {
-            writeStream.println(REPLAY_REQUEST);
-            choice = convertToReplayOption(readInput());
+    private Optional<Throw> convertToThrow(int consoleMove) {
+        for (Throw aThrow : Throw.values()) {
+            if (aThrow.equalsChoice(consoleMove)) {
+                return of(aThrow);
+            }
         }
-        return choice.get();
+        return Optional.empty();
     }
 
-    public void play() {
-        displayGreeting();
-        boolean replay = true;
-        while (replay) {
-            Throw aConsoleThrow = requestConsoleMove();
-            displayConsoleMove(aConsoleThrow);
-            Throw dummyAIThrow = dummySCISSORSAsAIThrow();
-            displayAIMove(dummyAIThrow);
-            Throw result = playAgainstAI(aConsoleThrow, dummyAIThrow);
-            displayResult(result);
-            replay = isPlayAgain(requestReplay());
+    private Optional<ReplayOption> getReplayOption() {
+        Optional<ReplayOption> replayOption = Optional.empty();
+        while (!isValidReplayChoice(replayOption)) {
+            displayMessageToConsole(REPLAY_OPTION);
+            replayOption = convertToReplayOption(readLine());
+            if (!isValidReplayChoice(replayOption)) {
+                displayMessageToConsole(INVALID_CHOICE);
+            }
         }
+        return replayOption;
     }
 
-
-    private boolean isPlayAgain(ReplayOption replayChoice) {
-        return replayChoice == ReplayOption.REPLAY;
+    private boolean isValidReplayChoice(Optional<ReplayOption> replayOption) {
+        return replayOption.isPresent();
     }
 
-    private Throw playAgainstAI(Throw aConsoleThrow, Throw dummyAIThrow) {
-        Rules rules = new Rules();
-        return rules.decideWinner(aConsoleThrow, dummyAIThrow);
+    private Optional<ReplayOption> convertToReplayOption(int replayChoice) {
+        for (ReplayOption option : ReplayOption.values()) {
+            if (option.equalsChoice(replayChoice)) {
+                return of(option);
+            }
+        }
+        return Optional.empty();
     }
 
-    private Throw dummySCISSORSAsAIThrow() {
-        return Throw.SCISSORS;
-    }
-
-    private int readInput() {
+    private int readLine() {
         try {
             return Integer.parseInt(readStream.readLine());
         } catch (IOException e) {
@@ -91,56 +115,27 @@ public class CommandLineUI {
         return 0;
     }
 
-    private boolean isValid(Optional<Throw> consoleThrow) {
-        if (!consoleThrow.isPresent()) return false;
-        for (Throw athrow : Throw.values()) {
-            if (athrow.equals(consoleThrow.get())) {
-                return true;
-            }
-        }
-        return false;
+
+    private void announceDraw() {
+        displayMessageToConsole(ANNOUNCE_DRAW);
     }
 
-    private Optional<Throw> convertToThrow(int input) {
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.getIdentifier() == input) {
-                return of(aThrow);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private boolean validReplayChoice(Optional<ReplayOption> choice) {
-        if (!choice.isPresent()) return false;
-        for (ReplayOption option : ReplayOption.values()) {
-            if (option.equals(choice.get())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Optional<ReplayOption> convertToReplayOption(int choice) {
-        for (ReplayOption option : ReplayOption.values()) {
-            if (option.optionNumber() == choice) {
-                return of(option);
-            }
-        }
-        return Optional.empty();
+    private void announceWin(Optional<Throw> result) {
+        displayMessageToConsole(String.format(WINNING_RESULT, result.get()));
     }
 
     private enum ReplayOption {
-        QUIT(1),
-        REPLAY(2);
+        REPLAY(1),
+        QUIT(2);
 
-        private int optionNumber;
+        private int choiceOption;
 
-        ReplayOption(int choiceNumber) {
-            this.optionNumber = choiceNumber;
+        ReplayOption(int choiceOption) {
+            this.choiceOption = choiceOption;
         }
 
-        public int optionNumber() {
-            return optionNumber;
+        public boolean equalsChoice(int choice) {
+            return choiceOption == choice;
         }
     }
 }
