@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class ConsolePlayerTest {
     private OutputStream output;
     private PrintStream printStream;
-    private CommandLineUI cli;
+    private CommandLine cli;
 
     @Before
     public void setUp() {
@@ -19,7 +19,7 @@ public class ConsolePlayerTest {
     @Test
     public void createComputerPlayerWithAThrow() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        cli = new CommandLineUI(inputStream, printStream);
+        cli = new CommandLine(inputStream, printStream);
         ConsolePlayer consolePlayer = new ConsolePlayer(cli);
         consolePlayer.generateThrow();
         assertEquals(Throw.ROCK, consolePlayer.getThrow());

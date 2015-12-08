@@ -3,7 +3,7 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 
-public class CommandLineUI implements UserInterface {
+public class CommandLine implements UserInterface {
     public String GAME_OVER = "Game Over! \n";
     public String ANNOUNCE_DRAW = "The game is a draw!";
     public String WINNING_RESULT = "And the winner is: %s \n";
@@ -16,7 +16,7 @@ public class CommandLineUI implements UserInterface {
     private PrintStream writeStream;
     private BufferedReader readStream;
 
-    public CommandLineUI(InputStream inputStream, PrintStream printStream) {
+    public CommandLine(InputStream inputStream, PrintStream printStream) {
         this.readStream = new BufferedReader(new InputStreamReader(inputStream));
         this.writeStream = printStream;
     }

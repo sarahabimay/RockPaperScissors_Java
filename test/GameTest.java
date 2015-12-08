@@ -1,4 +1,5 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -14,7 +15,7 @@ public class GameTest {
     private OutputStream output;
     private PrintStream printStream;
     private InputStream inputStream;
-    private CommandLineUI cli;
+    private CommandLine cli;
     private Game game;
 
     @Before
@@ -22,7 +23,7 @@ public class GameTest {
         output = new ByteArrayOutputStream();
         printStream = new PrintStream(output);
         inputStream = new ByteArrayInputStream("1\n".getBytes());
-        cli = new CommandLineUI(inputStream, printStream);
+        cli = new CommandLine(inputStream, printStream);
         game = new Game(cli, new Rules());
     }
 
@@ -81,6 +82,7 @@ public class GameTest {
     }
 
     @Test
+    @Ignore
     public void playTheGameAndyDrawResult() {
 //        ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
 //        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.SCISSORS);
@@ -94,7 +96,7 @@ public class GameTest {
     @Test
     public void requestToPlayAgain() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        CommandLine cli = new CommandLine(inputStream, printStream);
         Game game = new Game(cli, new Rules());
         assertEquals(true, game.playAgain());
     }
@@ -102,7 +104,7 @@ public class GameTest {
     @Test
     public void requestToQuit() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
-        CommandLineUI cli = new CommandLineUI(inputStream, printStream);
+        CommandLine cli = new CommandLine(inputStream, printStream);
         Game game = new Game(cli, new Rules());
         assertEquals(false, game.playAgain());
     }
@@ -121,7 +123,7 @@ public class GameTest {
                 QUIT);
         byte[] buf = buffer.getBytes();// invalid, Rock, Replay, Scissors, Invalid, Quit
         InputStream inputStream = new ByteArrayInputStream(buf);
-        CommandLineUI cli = new CommandLineUI(inputStream,printStream);
+        CommandLine cli = new CommandLine(inputStream,printStream);
         Game game = new Game(cli, new Rules());
         game.startGame();
         assertThat(output.toString(), containsString("REPLAY"));
@@ -135,7 +137,7 @@ public class GameTest {
         return aiPlayer;
     }
 
-    private ConsolePlayer generateConsolePlayerAndMove(CommandLineUI cli) {
+    private ConsolePlayer generateConsolePlayerAndMove(CommandLine cli) {
         ConsolePlayer consolePlayer = new ConsolePlayer(cli);
         consolePlayer.generateThrow();
         return consolePlayer;
