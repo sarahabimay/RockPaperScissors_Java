@@ -6,10 +6,6 @@ public class ConsolePlayer implements Player {
         this.userInterface = ui;
     }
 
-    public ConsolePlayer(Throw aThrow) {
-        this.consoleThrow = aThrow;
-    }
-
     public Throw getThrow() {
         return consoleThrow;
     }

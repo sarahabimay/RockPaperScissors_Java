@@ -9,8 +9,6 @@ public interface UserInterface {
 
     void displayAIMove(Throw symbol);
 
-//    void play();
-
     void displayConsoleMove(Throw symbol);
 
     boolean requestReplay();

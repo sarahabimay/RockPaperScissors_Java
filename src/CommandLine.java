@@ -4,16 +4,16 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLine implements UserInterface {
-    public String GAME_OVER = "Game Over! \n";
-    public String ANNOUNCE_DRAW = "The game is a draw!";
-    public String WINNING_RESULT = "And the winner is: %s \n";
-    public String AI_MOVE = "AI player has thrown: %s \n";
-    public String CONSOLE_MOVE = "You have thrown: %s \n";
-    public String INVALID_CHOICE = "Invalid selection. \n";
-    public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
-    public String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
-    public String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
-    private PrintStream writeStream;
+    public static final String GAME_OVER = "Game Over! \n";
+    public static final String ANNOUNCE_DRAW = "The game is a draw!";
+    public static final String WINNING_RESULT = "And the winner is: %s \n";
+    public static final String AI_MOVE = "AI player has thrown: %s \n";
+    public static final String CONSOLE_MOVE = "You have thrown: %s \n";
+    public static final String INVALID_CHOICE = "Invalid selection. \n";
+    public static final String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
+    public static final String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
+    public static final String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
+    private  PrintStream writeStream;
     private BufferedReader readStream;
 
     public CommandLine(InputStream inputStream, PrintStream printStream) {
