@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class Game {
     private Rules rules;
@@ -24,7 +25,6 @@ public class Game {
         }
     }
 
-
     public void askUIToDisplayGreeting() {
         this.userInterface.displayGreeting();
     }
@@ -36,7 +36,7 @@ public class Game {
     }
 
     public Player createAIPlayer() {
-        AIPlayer aiPlayer = new AIPlayer();
+        AIPlayer aiPlayer = new AIPlayer(new Random());
         this.players.add(aiPlayer);
         return aiPlayer;
     }
@@ -69,5 +69,4 @@ public class Game {
     private Optional<Throw> playGame() {
         return throwPlayerMoves(players.get(0), players.get(1));
     }
-
 }

@@ -4,7 +4,13 @@ import java.util.Random;
 import static java.util.Optional.of;
 
 public class AIPlayer implements Player {
+    private final int START_POSITION = 1;
+    private Random random;
     private Throw aThrow;
+
+    public AIPlayer(Random random) {
+        this.random = random;
+    }
 
     public Throw getThrow() {
         return aThrow;
@@ -21,6 +27,10 @@ public class AIPlayer implements Player {
     }
 
     private Optional<Throw> convertToThrow(int throwIdentifier) {
+        if (throwIdentifier <= Throw.values().length){
+            Throw aThrow= Throw.values()[throwIdentifier-1];
+            return of(aThrow);
+        }
         for (Throw aThrow : Throw.values()) {
             if (aThrow.equalsChoice(throwIdentifier)) {
                 return of(aThrow);
@@ -28,13 +38,12 @@ public class AIPlayer implements Player {
         }
         return Optional.empty();
     }
+
     private long randomFractionFromRange(long range) {
-        Random randomGenerator = new Random();
-        return (long) (range * randomGenerator.nextDouble());
+        return (long) (range * random.nextDouble());
     }
 
     private int randomNumberInRange(long fraction) {
-        int start = 1;
-        return (int) (fraction + start);
+        return (int) (fraction + START_POSITION);
     }
 }
