@@ -31,11 +31,6 @@ public class AIPlayer implements Player {
             Throw aThrow= Throw.values()[throwIdentifier-1];
             return of(aThrow);
         }
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.equalsChoice(throwIdentifier)) {
-                return of(aThrow);
-            }
-        }
         return Optional.empty();
     }
 
