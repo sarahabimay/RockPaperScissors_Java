@@ -1,13 +1,10 @@
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -41,14 +38,8 @@ public class GameTest {
     }
 
     @Test
-    public void checkValidAIMoveIsGenerate() {
-        assertThat(game.createAIPlayer().generateThrow(),
-                isIn(Arrays.asList(Throw.ROCK, Throw.PAPER, Throw.SCISSORS)));
-    }
-
-    @Test
     public void displayAIMoveToCommandLine() {
-        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.PAPER);
         Throw aiMove = aiPlayer.generateThrow();
         game.displayAIMove(aiMove);
         String expected = String.format(cli.AI_MOVE, Throw.PAPER);
@@ -65,7 +56,7 @@ public class GameTest {
     @Test
     public void playTheGameAndDisplayWinningResult() {
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
-        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.PAPER);
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.PAPER);
         Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
         String expected = String.format(cli.WINNING_RESULT, Throw.PAPER);
@@ -75,22 +66,10 @@ public class GameTest {
     @Test
     public void playTheGameAndDisplayDrawResult() {
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
-        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.ROCK);
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.ROCK);
         Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
         assertThat(output.toString(), containsString(cli.ANNOUNCE_DRAW));
-    }
-
-    @Test
-    @Ignore
-    public void playTheGameAndyDrawResult() {
-//        ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
-//        FakeAIPlayer aiPlayer = generateFakeAIPlayerAndMove(Throw.SCISSORS);
-//        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
-//        game.askUIToDisplayResult(result);
-        game.startGame();
-        String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
-        assertThat(output.toString(), containsString(expected));
     }
 
     @Test
@@ -129,12 +108,6 @@ public class GameTest {
         assertThat(output.toString(), containsString("REPLAY"));
         assertThat(output.toString(), containsString("QUIT"));
         assertThat(output.toString(), containsString(cli.INVALID_CHOICE));
-    }
-
-    private FakeAIPlayer generateFakeAIPlayerAndMove(Throw dummyMove) {
-        FakeAIPlayer aiPlayer = new FakeAIPlayer();
-        aiPlayer.nextThrow(dummyMove);
-        return aiPlayer;
     }
 
     private ConsolePlayer generateConsolePlayerAndMove(CommandLine cli) {
