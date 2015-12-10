@@ -1,12 +1,12 @@
 
-public enum Throw {
+public enum Mark {
     ROCK(1),
     PAPER(2),
     SCISSORS(3);
 
     private int identifier;
 
-    Throw(int identifier) {
+    Mark(int identifier) {
         this.identifier = identifier;
     }
 

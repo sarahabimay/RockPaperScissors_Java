@@ -6,35 +6,30 @@ import static java.util.Optional.of;
 public class AIPlayer implements Player {
     private final int START_POSITION = 1;
     private Random random;
-    private Throw aThrow;
+    private Mark mark;
 
     public AIPlayer(Random random) {
         this.random = random;
     }
 
-    public Throw getThrow() {
-        return aThrow;
+    public Mark getMark() {
+        return mark;
     }
 
-    public Throw generateThrow() {
-        this.aThrow = getRandomSymbolInRange(Throw.values().length);
-        return aThrow;
+    public Mark generateMark() {
+        this.mark = getRandomSymbolInRange(Mark.values().length);
+        return mark;
     }
 
-    private Throw getRandomSymbolInRange(int range) {
+    private Mark getRandomSymbolInRange(int range) {
         int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
         return convertToThrow(randomOrdinal).get();
     }
 
-    private Optional<Throw> convertToThrow(int throwIdentifier) {
-        if (throwIdentifier <= Throw.values().length){
-            Throw aThrow= Throw.values()[throwIdentifier-1];
-            return of(aThrow);
-        }
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.equalsChoice(throwIdentifier)) {
-                return of(aThrow);
-            }
+    private Optional<Mark> convertToThrow(int throwIdentifier) {
+        if (throwIdentifier <= Mark.values().length) {
+            Mark mark = Mark.values()[throwIdentifier - 1];
+            return of(mark);
         }
         return Optional.empty();
     }

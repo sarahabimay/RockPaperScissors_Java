@@ -2,20 +2,18 @@ import java.util.Random;
 
 public class FakeAIPlayer extends AIPlayer {
 
-    private Throw aThrow;
+    private Mark mark;
 
-    public FakeAIPlayer(Throw aThrow) {
+    public FakeAIPlayer(Mark mark) {
         super(new Random());
-        this.aThrow = aThrow;
+        this.mark = mark;
     }
 
-    @Override
-    public Throw generateThrow() {
-        return aThrow;
+    public Mark generateMark() {
+        return mark;
     }
 
-    @Override
-    public Throw getThrow() {
-        return aThrow;
+    public Mark getMark() {
+        return mark;
     }
 }

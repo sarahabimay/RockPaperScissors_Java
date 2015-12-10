@@ -32,17 +32,17 @@ public class GameTest {
 
     @Test
     public void getAndDisplayConsoleMoveToCommandLine() {
-        game.displayConsoleMove(game.createConsolePlayer().generateThrow());
-        String expected = String.format(cli.CONSOLE_MOVE, Throw.ROCK);
+        game.displayConsoleMove(game.createConsolePlayer().generateMark());
+        String expected = String.format(cli.CONSOLE_MOVE, Mark.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
 
     @Test
     public void displayAIMoveToCommandLine() {
-        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.PAPER);
-        Throw aiMove = aiPlayer.generateThrow();
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Mark.PAPER);
+        Mark aiMove = aiPlayer.generateMark();
         game.displayAIMove(aiMove);
-        String expected = String.format(cli.AI_MOVE, Throw.PAPER);
+        String expected = String.format(cli.AI_MOVE, Mark.PAPER);
         assertThat(output.toString(), containsString(expected));
     }
 
@@ -56,18 +56,18 @@ public class GameTest {
     @Test
     public void playTheGameAndDisplayWinningResult() {
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
-        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.PAPER);
-        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Mark.PAPER);
+        Optional<Mark> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
-        String expected = String.format(cli.WINNING_RESULT, Throw.PAPER);
+        String expected = String.format(cli.WINNING_RESULT, Mark.PAPER);
         assertThat(output.toString(), containsString(expected));
     }
 
     @Test
     public void playTheGameAndDisplayDrawResult() {
         ConsolePlayer consolePlayer = generateConsolePlayerAndMove(cli);
-        FakeAIPlayer aiPlayer = new FakeAIPlayer(Throw.ROCK);
-        Optional<Throw> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
+        FakeAIPlayer aiPlayer = new FakeAIPlayer(Mark.ROCK);
+        Optional<Mark> result = game.throwPlayerMoves(consolePlayer, aiPlayer);
         game.askUIToDisplayResult(result);
         assertThat(output.toString(), containsString(cli.ANNOUNCE_DRAW));
     }
@@ -95,14 +95,14 @@ public class GameTest {
         int QUIT = 2;
         String buffer = String.format("%s\n%s\n%s\n%s\n%s\n%s\n",
                 INVALID,
-                Throw.ROCK.getIdentifier(),
+                Mark.ROCK.getIdentifier(),
                 REPLAY,
-                Throw.SCISSORS.getIdentifier(),
+                Mark.SCISSORS.getIdentifier(),
                 INVALID,
                 QUIT);
         byte[] buf = buffer.getBytes();// invalid, Rock, Replay, Scissors, Invalid, Quit
         InputStream inputStream = new ByteArrayInputStream(buf);
-        CommandLine cli = new CommandLine(inputStream,printStream);
+        CommandLine cli = new CommandLine(inputStream, printStream);
         Game game = new Game(cli, new Rules());
         game.startGame();
         assertThat(output.toString(), containsString("REPLAY"));
@@ -112,7 +112,7 @@ public class GameTest {
 
     private ConsolePlayer generateConsolePlayerAndMove(CommandLine cli) {
         ConsolePlayer consolePlayer = new ConsolePlayer(cli);
-        consolePlayer.generateThrow();
+        consolePlayer.generateMark();
         return consolePlayer;
     }
 }

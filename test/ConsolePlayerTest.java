@@ -17,11 +17,11 @@ public class ConsolePlayerTest {
     }
 
     @Test
-    public void createComputerPlayerWithAThrow() {
+    public void createConsolePlayerMark() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
         ConsolePlayer consolePlayer = new ConsolePlayer(cli);
-        consolePlayer.generateThrow();
-        assertEquals(Throw.ROCK, consolePlayer.getThrow());
+        consolePlayer.generateMark();
+        assertEquals(Mark.ROCK, consolePlayer.getMark());
     }
 }

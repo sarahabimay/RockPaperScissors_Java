@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class CommandLineTest{
+public class CommandLineTest {
     private OutputStream output;
     private PrintStream printStream;
     private CommandLine cli;
@@ -23,14 +23,14 @@ public class CommandLineTest{
     public void requestHumanTurn() {
         InputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
-        assertEquals(Throw.ROCK, cli.requestConsoleMove());
+        assertEquals(Mark.ROCK, cli.requestConsoleMove());
     }
 
     @Test
     public void humanTurnIsInvalid() {
         InputStream inputStream = new ByteArrayInputStream("99\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
-        assertEquals(false, cli.isValidThrow(Optional.empty()));
+        assertEquals(false, cli.isValidMark(Optional.empty()));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class CommandLineTest{
         byte[] buf = "9\n2\n".getBytes();// 9 == invalid and 2 == Paper
         InputStream inputStream = new ByteArrayInputStream(buf);
         cli = new CommandLine(inputStream, printStream);
-        assertEquals(Throw.PAPER, cli.requestConsoleMove());
+        assertEquals(Mark.PAPER, cli.requestConsoleMove());
         assertThat(output.toString(), containsString(cli.INVALID_CHOICE));
     }
 
@@ -72,7 +72,7 @@ public class CommandLineTest{
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
         cli.displayConsoleMove(cli.requestConsoleMove());
-        String expected = String.format(cli.CONSOLE_MOVE, Throw.PAPER);
+        String expected = String.format(cli.CONSOLE_MOVE, Mark.PAPER);
         assertThat(output.toString(), containsString(expected));
     }
 
@@ -80,8 +80,8 @@ public class CommandLineTest{
     public void requestDisplayAIMove() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
-        cli.displayAIMove(Throw.ROCK);
-        String expected = String.format(cli.AI_MOVE, Throw.ROCK);
+        cli.displayAIMove(Mark.ROCK);
+        String expected = String.format(cli.AI_MOVE, Mark.ROCK);
         assertThat(output.toString(), containsString(expected));
     }
 
@@ -89,8 +89,8 @@ public class CommandLineTest{
     public void requestDisplayResultWithWinner() {
         InputStream inputStream = new ByteArrayInputStream("2\n".getBytes());
         cli = new CommandLine(inputStream, printStream);
-        cli.displayResult(Optional.of(Throw.ROCK));
-        String expected = String.format(cli.WINNING_RESULT, Throw.ROCK);
+        cli.displayResult(Optional.of(Mark.ROCK));
+        String expected = String.format(cli.WINNING_RESULT, Mark.ROCK);
         assertThat(output.toString(), containsString(expected));
 
     }

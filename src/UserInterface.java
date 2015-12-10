@@ -3,13 +3,13 @@ import java.util.Optional;
 public interface UserInterface {
     void displayGreeting();
 
-    void displayResult(Optional<Throw> result);
+    void displayResult(Optional<Mark> result);
 
-    Throw requestConsoleMove();
+    Mark requestConsoleMove();
 
-    void displayAIMove(Throw symbol);
+    void displayAIMove(Mark symbol);
 
-    void displayConsoleMove(Throw symbol);
+    void displayConsoleMove(Mark symbol);
 
     boolean requestReplay();
 }
