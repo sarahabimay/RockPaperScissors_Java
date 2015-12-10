@@ -4,15 +4,15 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 public class CommandLine implements UserInterface {
-    public String GAME_OVER = "Game Over! \n";
-    public String ANNOUNCE_DRAW = "The game is a draw!";
-    public String WINNING_RESULT = "And the winner is: %s \n";
-    public String AI_MOVE = "AI player has thrown: %s \n";
-    public String CONSOLE_MOVE = "You have thrown: %s \n";
-    public String INVALID_CHOICE = "Invalid selection. \n";
-    public String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
-    public String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
-    public String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
+    public static final String GAME_OVER = "Game Over! \n";
+    public static final String ANNOUNCE_DRAW = "The game is a draw!";
+    public static final String WINNING_RESULT = "And the winner is: %s \n";
+    public static final String AI_MOVE = "AI player has thrown: %s \n";
+    public static final String CONSOLE_MOVE = "You have thrown: %s \n";
+    public static final String INVALID_CHOICE = "Invalid selection. \n";
+    public static final String REPLAY_OPTION = "Do you want to play again? Yes(1) or No(2): \n";
+    public static final String THROW_CHOICE = "Please select Rock(1), Paper(2), or Scissors(3): \n";
+    public static final String GREETING_PROMPT = "Rock Paper Scissors Game!\n";
     private PrintStream writeStream;
     private BufferedReader readStream;
 
@@ -25,19 +25,19 @@ public class CommandLine implements UserInterface {
         displayMessageToConsole(GREETING_PROMPT);
     }
 
-    public Throw requestConsoleMove() {
+    public Mark requestConsoleMove() {
         return getMoveFromConsole();
     }
 
-    public void displayConsoleMove(Throw consoleThrow) {
-        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleThrow));
+    public void displayConsoleMove(Mark consoleMark) {
+        displayMessageToConsole(String.format(CONSOLE_MOVE, consoleMark));
     }
 
-    public void displayAIMove(Throw rock) {
+    public void displayAIMove(Mark rock) {
         displayMessageToConsole(String.format(AI_MOVE, rock));
     }
 
-    public void displayResult(Optional<Throw> result) {
+    public void displayResult(Optional<Mark> result) {
         announceGameOver();
         if (result.isPresent()) {
             announceWin(result);
@@ -51,26 +51,26 @@ public class CommandLine implements UserInterface {
         return replayOption.equals(ReplayOption.REPLAY);
     }
 
-    public boolean isValidThrow(Optional<Throw> consoleMove) {
+    public boolean isValidMark(Optional<Mark> consoleMove) {
         return consoleMove.isPresent();
     }
 
-    private Throw getMoveFromConsole() {
-        Optional<Throw> consoleThrow = Optional.empty();
-        while (!isValidThrow(consoleThrow)) {
+    private Mark getMoveFromConsole() {
+        Optional<Mark> mark = Optional.empty();
+        while (!isValidMark(mark)) {
             displayMessageToConsole(THROW_CHOICE);
-            consoleThrow = convertToThrow(readLine());
-            if (!isValidThrow(consoleThrow)) {
+            mark = convertToMark(readLine());
+            if (!isValidMark(mark)) {
                 displayMessageToConsole(INVALID_CHOICE);
             }
         }
-        return consoleThrow.get();
+        return mark.get();
     }
 
-    private Optional<Throw> convertToThrow(int consoleMove) {
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.equalsChoice(consoleMove)) {
-                return of(aThrow);
+    private Optional<Mark> convertToMark(int consoleMove) {
+        for (Mark mark : Mark.values()) {
+            if (mark.equalsChoice(consoleMove)) {
+                return of(mark);
             }
         }
         return Optional.empty();
@@ -126,7 +126,7 @@ public class CommandLine implements UserInterface {
         displayMessageToConsole(ANNOUNCE_DRAW);
     }
 
-    private void announceWin(Optional<Throw> result) {
+    private void announceWin(Optional<Mark> result) {
         displayMessageToConsole(String.format(WINNING_RESULT, result.get()));
     }
 
@@ -134,8 +134,8 @@ public class CommandLine implements UserInterface {
         displayMessageToConsole(GAME_OVER);
     }
 
-    private void displayMessageToConsole(String throw_choice) {
-        writeStream.println(throw_choice);
+    private void displayMessageToConsole(String message) {
+        writeStream.println(message);
     }
 
     private enum ReplayOption {

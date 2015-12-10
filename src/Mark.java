@@ -1,12 +1,12 @@
 
-public enum Throw {
+public enum Mark {
     ROCK(1),
     PAPER(2),
     SCISSORS(3);
 
     private int identifier;
 
-    Throw(int identifier) {
+    Mark(int identifier) {
         this.identifier = identifier;
     }
 
@@ -14,7 +14,7 @@ public enum Throw {
         return identifier;
     }
 
-    public boolean equalsChoice(int moveChoice){
+    public boolean equalsChoice(int moveChoice) {
         return identifier == moveChoice;
     }
 }

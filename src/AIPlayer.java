@@ -4,37 +4,41 @@ import java.util.Random;
 import static java.util.Optional.of;
 
 public class AIPlayer implements Player {
-    private Throw aThrow;
+    private final int START_POSITION = 1;
+    private Random random;
+    private Mark mark;
 
-    public Throw getThrow() {
-        return aThrow;
+    public AIPlayer(Random random) {
+        this.random = random;
     }
 
-    public Throw generateThrow() {
-        this.aThrow = getRandomSymbolInRange(Throw.values().length);
-        return aThrow;
+    public Mark getMark() {
+        return mark;
     }
 
-    private Throw getRandomSymbolInRange(int range) {
+    public Mark generateMark() {
+        this.mark = getRandomSymbolInRange(Mark.values().length);
+        return mark;
+    }
+
+    private Mark getRandomSymbolInRange(int range) {
         int randomOrdinal = randomNumberInRange(randomFractionFromRange(range));
         return convertToThrow(randomOrdinal).get();
     }
 
-    private Optional<Throw> convertToThrow(int throwIdentifier) {
-        for (Throw aThrow : Throw.values()) {
-            if (aThrow.equalsChoice(throwIdentifier)) {
-                return of(aThrow);
-            }
+    private Optional<Mark> convertToThrow(int throwIdentifier) {
+        if (throwIdentifier <= Mark.values().length) {
+            Mark mark = Mark.values()[throwIdentifier - 1];
+            return of(mark);
         }
         return Optional.empty();
     }
+
     private long randomFractionFromRange(long range) {
-        Random randomGenerator = new Random();
-        return (long) (range * randomGenerator.nextDouble());
+        return (long) (range * random.nextDouble());
     }
 
     private int randomNumberInRange(long fraction) {
-        int start = 1;
-        return (int) (fraction + start);
+        return (int) (fraction + START_POSITION);
     }
 }

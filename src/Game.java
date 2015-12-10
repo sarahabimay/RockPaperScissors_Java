@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class Game {
     private Rules rules;
@@ -17,13 +18,12 @@ public class Game {
         boolean replay = true;
         while (replay) {
             askUIToDisplayGreeting();
-            displayConsoleMove(createConsolePlayer().generateThrow());
-            displayAIMove(createAIPlayer().generateThrow());
+            displayConsoleMove(createConsolePlayer().generateMark());
+            displayAIMove(createAIPlayer().generateMark());
             askUIToDisplayResult(playGame());
             replay = playAgain();
         }
     }
-
 
     public void askUIToDisplayGreeting() {
         this.userInterface.displayGreeting();
@@ -36,7 +36,7 @@ public class Game {
     }
 
     public Player createAIPlayer() {
-        AIPlayer aiPlayer = new AIPlayer();
+        AIPlayer aiPlayer = new AIPlayer(new Random());
         this.players.add(aiPlayer);
         return aiPlayer;
     }
@@ -45,20 +45,20 @@ public class Game {
         return this.players;
     }
 
-    public Optional<Throw> throwPlayerMoves(Player player1, Player player2) {
-        return rules.decideWinner(player1.getThrow(), player2.getThrow());
+    public Optional<Mark> throwPlayerMoves(Player player1, Player player2) {
+        return rules.decideWinner(player1.getMark(), player2.getMark());
     }
 
-    public void askUIToDisplayResult(Optional<Throw> result) {
+    public void askUIToDisplayResult(Optional<Mark> result) {
         userInterface.displayResult(result);
     }
 
-    void displayConsoleMove(Throw aThrow) {
-        userInterface.displayConsoleMove(aThrow);
+    void displayConsoleMove(Mark mark) {
+        userInterface.displayConsoleMove(mark);
     }
 
-    void displayAIMove(Throw aThrow) {
-        userInterface.displayAIMove(aThrow);
+    void displayAIMove(Mark mark) {
+        userInterface.displayAIMove(mark);
     }
 
     boolean playAgain() {
@@ -66,8 +66,7 @@ public class Game {
         return userInterface.requestReplay();
     }
 
-    private Optional<Throw> playGame() {
+    private Optional<Mark> playGame() {
         return throwPlayerMoves(players.get(0), players.get(1));
     }
-
 }

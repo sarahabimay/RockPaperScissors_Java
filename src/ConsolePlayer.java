@@ -1,21 +1,17 @@
 public class ConsolePlayer implements Player {
     private UserInterface userInterface;
-    private Throw consoleThrow;
+    private Mark mark;
 
     public ConsolePlayer(UserInterface ui) {
         this.userInterface = ui;
     }
 
-    public ConsolePlayer(Throw aThrow) {
-        this.consoleThrow = aThrow;
+    public Mark getMark() {
+        return mark;
     }
 
-    public Throw getThrow() {
-        return consoleThrow;
-    }
-
-    public Throw generateThrow() {
-        consoleThrow = userInterface.requestConsoleMove();
-        return consoleThrow;
+    public Mark generateMark() {
+        mark = userInterface.requestConsoleMove();
+        return mark;
     }
 }
